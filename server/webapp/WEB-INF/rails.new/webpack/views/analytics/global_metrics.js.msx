@@ -26,33 +26,32 @@
   const PluginEndpoint           = require('rails-shared/plugin-endpoint');
   const VersionUpdater           = require('models/shared/version_updater');
   const Frame                    = require('models/analytics/frame');
-  const MetricType                = require('models/analytics/metric_type');
-  const Tabs                     = require('models/analytics/tabs');
   const AnalyticsDashboardHeader = require('views/analytics/header');
   const AnalyticsDashboardTabs   = require('views/analytics/tabs');
-  const AnalyticsGlobalMetrics   = require('views/analytics/global_metrics');
   const PluginiFrameWidget       = require('views/analytics/plugin_iframe_widget');
   const Routes                   = require('gen/js-routes');
 
-  PluginEndpoint.ensure();
+  const models = {};
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const main = document.querySelector("[data-supported-dashboard-metrics]");
+  const AnalyticsGlobalMetrics = {
+    view(vnode) { // eslint-disable-line no-unused-vars
+        const frames = [];
+        $.each(vnode.attrs.model.data, (pluginId, metrics) => {
+          $.each(metrics, (idx, metric) => {
+            const uid = `f-${pluginId}:${metric}:${idx}`;
 
-    m.mount(main, {
-      view() {
-        const pageItems = [];
-        const tabs = new Tabs(m.redraw);
-        pageItems.push(m(AnalyticsDashboardHeader));
-        tabs.push(new MetricType("Global", $(main).data("supported-dashboard-metrics")));
-        pageItems.push(m(AnalyticsDashboardTabs, {tabs: tabs}));
-        pageItems.push(m(tabs.current().view, {model: tabs.current()}));
-        return pageItems;
-      }
-    });
+            let model = models[uid];
+            if (!model) {
+              model = models[uid] = new Frame(m.redraw);
+              model.url(Routes.dashboardAnalyticsPath({plugin_id: pluginId, metric})); // eslint-disable-line camelcase
+            }
+            frames.push(m(PluginiFrameWidget, {model: models[uid], pluginId, uid}));
+          });
+        });
+        return frames;
+    }
+  };
 
-    // boilerplate to init menus and check for updates
-    $(document).foundation();
-    new VersionUpdater().update();
-  });
+  module.exports = AnalyticsGlobalMetrics;
+
 })();
