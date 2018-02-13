@@ -20,8 +20,9 @@
   const m = require("mithril");
   const PluginEndpoint = require("rails-shared/plugin-endpoint");
 
-  const PluginiFrameWidget = {
-    oncreate(vnode) {
+  const PluginiFrameWidget = function() {
+    let currentUrl = null
+    function oncreate(vnode) {
       vnode.dom.onload = () => {
         PluginEndpoint.init(vnode.dom.contentWindow, {
           uid: vnode.attrs.uid,
@@ -30,13 +31,35 @@
         });
       };
 
-      vnode.attrs.model.load();
-    },
+      currentUrl = vnode.attrs.model.url();
 
-    view(vnode) {
+      vnode.attrs.model.load();
+    }
+
+    function onupdate(vnode) {
+      if (vnode.attrs && vnode.attrs.model) {
+        if (currentUrl !== vnode.attrs.model.url()) {
+          vnode.dom.onload = () => {
+            PluginEndpoint.init(vnode.dom.contentWindow, {
+              uid: vnode.attrs.uid,
+              pluginId: vnode.attrs.pluginId,
+              data: vnode.attrs.model.data()
+            });
+          };
+
+          currentUrl = vnode.attrs.model.url();
+
+          vnode.attrs.model.load();
+        }
+      }
+    }
+
+    function view(vnode) {
       const attrs = {src: vnode.attrs.model.view()};
       return <iframe sandbox="allow-scripts" {...attrs}></iframe>;
     }
+
+    return {oncreate, view, onupdate};
   };
 
   module.exports = PluginiFrameWidget;

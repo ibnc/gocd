@@ -37,9 +37,11 @@
     const pluginId = "com.thoughtworks.gocd.analytics";
     const uid = `f-${pluginId}:pipeline:burp`;
 
+
     function oninit(vnode) {
       currentPipeline = vnode.attrs.model.data[0];
     }
+
     function view(vnode) { // eslint-disable-line no-unused-vars
       let x = _.map(vnode.attrs.model.data, function(pipeline) {
         if (pipeline == currentPipeline) {
@@ -57,7 +59,6 @@
               currentPipeline = $(this).val();
               frames[uid] = new Frame(m.redraw);
               frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
-              frames[uid].load();
             }
           }, x)
       return [dropdown, m(PluginiFrameWidget, {model: frames[uid], pluginId, uid})];
