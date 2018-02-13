@@ -39,13 +39,13 @@
         }
       });
       return (
-        <div class="content">
-            <div class="sub_tabs_container">
-              <ul class="dashboard-tabs columns medium-5 large-5">
+        <div class="dashboard-content">
+            <div class="dashboard-tabs-container">
+              <ul class="dashboard-tabs">
                 {x}
               </ul>
             </div>
-            <div class="sub_tab_container_content">
+            <div class="dashboard-charts">
               {m(tabs.current().view, {model: tabs.current()})}
            </div>
         </div>

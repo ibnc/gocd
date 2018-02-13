@@ -46,7 +46,7 @@
         }
       });
       let pluginId = "com.thoughtworks.gocd.analytics";
-      const uid = `f-${pluginId}:pipeline:eek`;
+      const uid = `f-${pluginId}:pipeline:burp`;
       let frame = frames[uid];
       if (!frame) {
         let frame = frames[uid] = new Frame(m.redraw);
@@ -55,16 +55,13 @@
       let dropdown = m("select", {
             onchange: function() {
               currentPipeline = $(this).val();
-              frame.url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
+              const f = frames[uid];
+              f.url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
+              f.load();
             }
           }, x)
       let iFrame = m(PluginiFrameWidget, {model: frames[uid], pluginId, uid})
-      return (
-        <span>
-          {dropdown}
-          {iFrame}
-        </span>
-      );
+      return [dropdown, iFrame];
     }
     return {view, oninit};
   }
