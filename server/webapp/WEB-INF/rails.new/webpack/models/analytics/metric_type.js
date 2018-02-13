@@ -21,9 +21,7 @@
   const      $ = require("jquery");
   const AnalyticsGlobalMetrics   = require('views/analytics/global_metrics');
 
-  function MetricType(name, data) {
-    const view = AnalyticsGlobalMetrics;
-
+  function MetricType(name, view, data) {
     return {name, view, data};
   }
 

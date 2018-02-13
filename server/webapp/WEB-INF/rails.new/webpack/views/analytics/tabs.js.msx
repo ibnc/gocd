@@ -20,29 +20,40 @@
   const m = require("mithril");
   const _ = require('lodash');
 
-  const AnalyticsDashboardTabs = {
-    view(vnode) { // eslint-disable-line no-unused-vars
-      const tabs = vnode.attrs.tabs;
+  const DashboardTabs =  function() {
+    let tabs = null;
+    function oninit(vnode) {
+      tabs = vnode.attrs.tabs;
+    }
+
+    function view(vnode) { // eslint-disable-line no-unused-vars
       const x = _.map(tabs.tabs, (tab) => {
         if (tabs.current().name === tab.name) {
           return (<li class="current">{tab.name}</li>);
         } else {
-          return(<li>{tab.name}</li>);
+          return(m("li", {
+            onclick: function() {
+              tabs.setActiveTab(tab);
+            }
+          }, tab.name));
         }
       });
       return (
         <div class="content">
             <div class="sub_tabs_container">
-              <ul class="columns medium-5 large-5">
+              <ul class="dashboard-tabs columns medium-5 large-5">
                 {x}
               </ul>
             </div>
-            <div class="sub_tab_container_content"></div>
+            <div class="sub_tab_container_content">
+              {m(tabs.current().view, {model: tabs.current()})}
+           </div>
         </div>
       );
     }
-  };
+    return {view, oninit}
+  }
 
-  module.exports = AnalyticsDashboardTabs;
+  module.exports = DashboardTabs;
 
 })();

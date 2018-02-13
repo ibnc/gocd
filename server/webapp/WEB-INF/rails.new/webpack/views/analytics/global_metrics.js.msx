@@ -33,7 +33,7 @@
 
   const models = {};
 
-  const AnalyticsGlobalMetrics = {
+  const GlobalMetrics = {
     view(vnode) { // eslint-disable-line no-unused-vars
         const frames = [];
         $.each(vnode.attrs.model.data, (pluginId, metrics) => {
@@ -52,6 +52,6 @@
     }
   };
 
-  module.exports = AnalyticsGlobalMetrics;
+  module.exports = GlobalMetrics;
 
 })();

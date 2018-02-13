@@ -26,11 +26,12 @@
   const PluginEndpoint           = require('rails-shared/plugin-endpoint');
   const VersionUpdater           = require('models/shared/version_updater');
   const Frame                    = require('models/analytics/frame');
-  const MetricType                = require('models/analytics/metric_type');
+  const MetricType               = require('models/analytics/metric_type');
   const Tabs                     = require('models/analytics/tabs');
   const AnalyticsDashboardHeader = require('views/analytics/header');
-  const AnalyticsDashboardTabs   = require('views/analytics/tabs');
-  const AnalyticsGlobalMetrics   = require('views/analytics/global_metrics');
+  const DashboardTabs            = require('views/analytics/tabs');
+  const GlobalMetrics            = require('views/analytics/global_metrics');
+  const PipelineMetrics          = require('views/analytics/pipeline_metrics');
   const PluginiFrameWidget       = require('views/analytics/plugin_iframe_widget');
   const Routes                   = require('gen/js-routes');
 
@@ -44,9 +45,9 @@
         const pageItems = [];
         const tabs = new Tabs(m.redraw);
         pageItems.push(m(AnalyticsDashboardHeader));
-        tabs.push(new MetricType("Global", $(main).data("supported-dashboard-metrics")));
-        pageItems.push(m(AnalyticsDashboardTabs, {tabs: tabs}));
-        pageItems.push(m(tabs.current().view, {model: tabs.current()}));
+        tabs.push(new MetricType("Global", GlobalMetrics, $(main).data("supported-dashboard-metrics")));
+        tabs.push(new MetricType("Pipeline", PipelineMetrics, ["four", "five"]));
+        pageItems.push(m(DashboardTabs, {tabs: tabs}));
         return pageItems;
       }
     });

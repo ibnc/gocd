@@ -20,29 +20,31 @@
   const Stream = require("mithril/stream");
   const      $ = require("jquery");
 
-  function Tabs(callback) {
-    let activeTab = 0;
-    const tabs = [];
-
-    function push(tab) {
-      tabs.push(tab);
-    }
+  function Tab(callback) {
+    const active = Stream();
+    const name = Stream();
+    const view = Stream();
 
     function load() {
-      callback();
+      return (
+        name();
+      );
     }
 
-    function setActiveTab(tab) {
-      activeTab = tabs.indexOf(tab);
-      callback();
+    function select() {
+      $.ajax({
+        url: url(),
+        type: "GET",
+        dataType: "json"
+      }).done((r) => {
+        data(r.data);
+        view(r.view_path);
+        callback();
+      });
     }
 
-    function current() {
-      return tabs[activeTab];
-    }
-
-    return {tabs, push, current, load, setActiveTab};
+    return {active, view, name, load};
   }
 
-  module.exports = Tabs;
+  module.exports = Tab;
 })();
