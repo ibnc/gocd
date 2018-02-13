@@ -23,11 +23,10 @@
 @import "font-awesome";
 
 .analytics-container {
-  height:          80vh;
+  height:          79vh;
   display:         flex;
   flex-wrap:       wrap;
   justify-content: center;
-  overflow:        scroll;
   margin-top:      50px;
 
   h1 {
@@ -41,10 +40,6 @@
     flex-direction: column;
 
     .dashboard-tabs-container {
-      list-style-image: none;
-      list-style-position: outside;
-      list-style-type: none;
-
       border-bottom: 1px solid #ccc;
       margin-bottom: 10px;
 
@@ -57,7 +52,7 @@
           list-style: none;
           padding: 7px 15px;
           line-height: 19px;
-          font-size: 13px;
+          font-size: 15px;
           border-radius: 3px 3px 0 0;
           font-weight: 600;
           color: #333;
@@ -65,6 +60,7 @@
 
         li.current {
           border-bottom: 4px solid #94399e;
+          font-weight: 700;
         }
       }
     }

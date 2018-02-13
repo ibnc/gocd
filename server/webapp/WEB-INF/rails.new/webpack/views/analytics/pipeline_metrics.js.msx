@@ -34,6 +34,9 @@
 
   const PipelineMetrics = function() {
     let currentPipeline = null;
+    const pluginId = "com.thoughtworks.gocd.analytics";
+    const uid = `f-${pluginId}:pipeline:burp`;
+
     function oninit(vnode) {
       currentPipeline = vnode.attrs.model.data[0];
     }
@@ -45,23 +48,19 @@
           return (<option>{pipeline}</option>);
         }
       });
-      let pluginId = "com.thoughtworks.gocd.analytics";
-      const uid = `f-${pluginId}:pipeline:burp`;
-      let frame = frames[uid];
-      if (!frame) {
-        let frame = frames[uid] = new Frame(m.redraw);
-        frame.url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
+      if (!frames[uid]) {
+        frames[uid] = new Frame(m.redraw);
+        frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
       }
       let dropdown = m("select", {
-            onchange: function() {
+            onchange: function(e) {
               currentPipeline = $(this).val();
-              const f = frames[uid];
-              f.url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
-              f.load();
+              frames[uid] = new Frame(m.redraw);
+              frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
+              frames[uid].load();
             }
           }, x)
-      let iFrame = m(PluginiFrameWidget, {model: frames[uid], pluginId, uid})
-      return [dropdown, iFrame];
+      return [dropdown, m(PluginiFrameWidget, {model: frames[uid], pluginId, uid})];
     }
     return {view, oninit};
   }
