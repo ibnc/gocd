@@ -46,7 +46,7 @@
         const tabs = new Tabs(m.redraw);
         pageItems.push(m(AnalyticsDashboardHeader));
         tabs.push(new MetricType("Global", GlobalMetrics, $(main).data("supported-dashboard-metrics")));
-        tabs.push(new MetricType("Pipeline", PipelineMetrics, ["BuildApp1", "BuildApp2", "smoke", "Staging", "Production"]));
+        tabs.push(new MetricType("Pipeline", PipelineMetrics, ["smoke", "Staging", "Production", "BuildApp1", "BuildApp2"]));
         pageItems.push(m(DashboardTabs, {tabs: tabs}));
         return pageItems;
       }
