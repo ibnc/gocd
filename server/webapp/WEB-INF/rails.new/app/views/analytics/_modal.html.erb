@@ -1,0 +1,10 @@
+<div class="overlay">
+  <header class="overlay_header">
+    <h3><%= scope[:title] %></h3>
+    <button class="overlay_close">X</button>
+  </header>
+  <div class="overlay_content"></div>
+</div>
+<div class="overlay_bg"></div>
+
+<a onclick='Analytics.modal(<%== {url: scope[:url], title: scope[:title], key: "analytics.pipeline-chart"}.to_json %>); return false;' ><i class="fa fa-bar-chart pipeline-analytics-icon"></i></a>

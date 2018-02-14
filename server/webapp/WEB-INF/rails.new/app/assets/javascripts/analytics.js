@@ -3,18 +3,9 @@
 
   window.Analytics = {
     modal: function(options) {
-      var div = document.createElement("div");
-
       PluginEndpoint.ensure();
-      $(div).addClass("analytics-plugin").dialog({
-        title: options.title || "Analytics",
-        width: 760,
-        height: 495,
-        modal: true,
-        close: function(e, ui) {
-          $(div).remove();
-        }
-      });
+
+      var div = $('.overlay_content');
 
       $.ajax({
         url: options.url,
@@ -28,8 +19,24 @@
           PluginEndpoint.init(frame.contentWindow, {data: r.data })
         };
 
-        div.appendChild(frame);
+        div.append(frame);
         frame.setAttribute("src", r.view_path);
+      }).fail(function(xhr) {
+        var errorEl = document.createElement("div");
+        $(errorEl).addClass("error");
+        errorEl.textContent = xhr.responseText;
+        div.append(errorEl);
+      });
+
+      $('.overlay').show();
+      $('.overlay_bg').show();
+      $('body').addClass("fixed");
+
+      $('.overlay_close').click(function() {
+        $('.overlay').fadeOut();
+        $('.overlay_bg').fadeOut();
+        $('body').removeClass("fixed");
+        div.empty();
       });
     }
   };
