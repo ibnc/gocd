@@ -63,11 +63,11 @@ public class AnalyticsExtension extends AbstractExtension {
         });
     }
 
-    public AnalyticsData getPipelineAnalytics(String pluginId, String pipelineName) {
+    public AnalyticsData getPipelineAnalytics(String pluginId, String pipelineName, String context) {
         return pluginRequestHelper.submitRequest(pluginId, REQUEST_GET_ANALYTICS, new DefaultPluginInteractionCallback<AnalyticsData>() {
             @Override
             public String requestBody(String resolvedExtensionVersion) {
-                return getMessageConverter(resolvedExtensionVersion).getPipelineAnalyticsRequestBody(pipelineName);
+                return getMessageConverter(resolvedExtensionVersion).getPipelineAnalyticsRequestBody(pipelineName, context);
             }
 
             @Override

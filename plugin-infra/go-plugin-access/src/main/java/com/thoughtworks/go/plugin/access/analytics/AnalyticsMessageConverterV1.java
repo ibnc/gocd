@@ -32,10 +32,13 @@ public class AnalyticsMessageConverterV1 implements AnalyticsMessageConverter {
     private static final Gson GSON = new Gson();
 
     @Override
-    public String getPipelineAnalyticsRequestBody(String pipelineName) {
+    public String getPipelineAnalyticsRequestBody(String pipelineName, String context) {
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("type", TYPE_PIPELINE);
-        requestMap.put("data", Collections.singletonMap("pipeline_name", pipelineName));
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("pipeline_name", pipelineName);
+        dataMap.put("context", context);
+        requestMap.put("data", dataMap);
 
         return GSON.toJson(requestMap);
     }

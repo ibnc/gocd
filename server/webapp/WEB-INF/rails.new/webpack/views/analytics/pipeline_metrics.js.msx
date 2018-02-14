@@ -52,13 +52,13 @@
       });
       if (!frames[uid]) {
         frames[uid] = new Frame(m.redraw);
-        frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
+        frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline, context: "dashboard"}));
       }
       let dropdown = m("select", {
             onchange: function(e) {
               currentPipeline = $(this).val();
               frames[uid] = new Frame(m.redraw);
-              frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline}));
+              frames[uid].url(Routes.pipelineAnalyticsPath({plugin_id: pluginId, pipeline_name: currentPipeline, context: "dashboard"}));
             }
           }, x)
       return [dropdown, m(PluginiFrameWidget, {model: frames[uid], pluginId, uid})];

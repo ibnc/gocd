@@ -77,8 +77,8 @@ public class AnalyticsMessageConverterV1Test {
 
     @Test
     public void createsCorrectJSONForPipelineRequest() {
-        Map expected = GSON.fromJson("{\"type\":\"pipeline\", \"data\": {\"pipeline_name\": \"anything\"}}", Map.class);
-        Map actual = GSON.fromJson(converter.getPipelineAnalyticsRequestBody("anything"), Map.class);
+        Map expected = GSON.fromJson("{\"type\":\"pipeline\", \"data\": {\"pipeline_name\": \"anything\", \"context\": \"foo\"}}", Map.class);
+        Map actual = GSON.fromJson(converter.getPipelineAnalyticsRequestBody("anything", "foo"), Map.class);
         assertEquals(expected, actual);
     }
 }

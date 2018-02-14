@@ -99,9 +99,9 @@ public class AnalyticsExtensionTest {
         pluginInfo.setStaticAssetsPath("/assets/root");
         metadataStore.setPluginInfo(pluginInfo);
 
-        AnalyticsData pipelineAnalytics = analyticsExtension.getPipelineAnalytics(PLUGIN_ID, "test_pipeline");
+        AnalyticsData pipelineAnalytics = analyticsExtension.getPipelineAnalytics(PLUGIN_ID, "test_pipeline", "foo");
 
-        assertRequest(requestArgumentCaptor.getValue(), AnalyticsPluginConstants.EXTENSION_NAME, "1.0", REQUEST_GET_ANALYTICS, "{\"type\": \"pipeline\", \"data\": {\"pipeline_name\": \"test_pipeline\"}}");
+        assertRequest(requestArgumentCaptor.getValue(), AnalyticsPluginConstants.EXTENSION_NAME, "1.0", REQUEST_GET_ANALYTICS, "{\"type\": \"pipeline\", \"data\": {\"pipeline_name\": \"test_pipeline\", \"context\": \"foo\"}}");
 
         assertThat(pipelineAnalytics.getViewPath(), is("path/to/view"));
 

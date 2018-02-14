@@ -38,7 +38,7 @@ class AnalyticsController < ApplicationController
   end
 
   def pipeline
-    render :json => analytics_extension.getPipelineAnalytics(params[:plugin_id], params[:pipeline_name]).toMap().to_h
+    render :json => analytics_extension.getPipelineAnalytics(params[:plugin_id], params[:pipeline_name], params[:context]).toMap().to_h
   rescue => e
     render_plugin_error e
   end

@@ -25,7 +25,7 @@ public interface AnalyticsMessageConverter {
 
     com.thoughtworks.go.plugin.domain.analytics.Capabilities getCapabilitiesFromResponseBody(String responseBody);
 
-    String getPipelineAnalyticsRequestBody(String pipelineName);
+    String getPipelineAnalyticsRequestBody(String pipelineName, String context);
 
     AnalyticsData getAnalyticsFromResponseBody(String responseBody);
 
