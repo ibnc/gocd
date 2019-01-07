@@ -20,6 +20,7 @@ import com.thoughtworks.go.plugin.access.configrepo.contract.CRConfigurationProp
 import com.thoughtworks.go.plugin.access.configrepo.contract.CRParseResult;
 import com.thoughtworks.go.plugin.access.configrepo.contract.CRPipeline;
 import com.thoughtworks.go.plugin.domain.configrepo.Capabilities;
+import com.thoughtworks.go.plugin.domain.configrepo.Configuration;
 
 import java.util.Collection;
 
@@ -31,4 +32,5 @@ public interface ConfigRepoExtensionContract {
     CRParseResult parseDirectory(String pluginId, final String destinationFolder, final Collection<CRConfigurationProperty> configurations);
     String pipelineExport(String pluginId, final CRPipeline pipelineConfig);
     Capabilities getCapabilities(String pluginId);
+    Configuration getRepoConfiguration(String pluginId);
 }

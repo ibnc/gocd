@@ -28,6 +28,7 @@ import com.thoughtworks.go.plugin.access.configrepo.contract.CRPipeline;
 import com.thoughtworks.go.plugin.access.configrepo.v1.messages.ParseDirectoryMessage;
 import com.thoughtworks.go.plugin.access.configrepo.v1.messages.ParseDirectoryResponseMessage;
 import com.thoughtworks.go.plugin.domain.configrepo.Capabilities;
+import com.thoughtworks.go.plugin.domain.configrepo.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +71,11 @@ public class JsonMessageHandler1_0 implements JsonMessageHandler {
 
     @Override
     public Capabilities getCapabilitiesFromResponse(String responseBody) {
+        return null;
+    }
+
+    @Override
+    public Configuration getRepoConfigurationFromResponse(String responseBody) {
         return null;
     }
 
