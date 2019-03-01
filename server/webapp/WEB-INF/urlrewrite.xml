@@ -550,6 +550,12 @@
   </rule>
 
   <rule>
+    <name>Simplified Pipelines Add Page</name>
+    <from>^/pipelines/new(/?)$</from>
+    <to last="true">/spark/pipelines/new</to>
+  </rule>
+
+  <rule>
     <name>Default dashboard, based on toggle</name>
     <from>^/pipelines(/?)$</from>
     <to last="true">/spark/dashboard</to>
