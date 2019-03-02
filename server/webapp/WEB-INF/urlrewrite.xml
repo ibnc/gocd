@@ -551,8 +551,8 @@
 
   <rule>
     <name>Simplified Pipelines Add Page</name>
-    <from>^/pipelines/new(/?)$</from>
-    <to last="true">/spark/pipelines/new</to>
+    <from>^/admin/pipelines/create(/?)$</from>
+    <to last="true">/spark/admin/pipelines/create</to>
   </rule>
 
   <rule>
