@@ -16,6 +16,9 @@
 
 import * as m from "mithril";
 import {Page, PageState} from "views/pages/page";
+import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
+import {FillableSection} from "views/pages/pipelines/fillable_section";
+import {UserInputPane} from "views/pages/pipelines/user_input_pane";
 
 export class PipelineCreatePage extends Page {
   pageName(): string {
@@ -23,14 +26,24 @@ export class PipelineCreatePage extends Page {
   }
 
   oninit(vnode: m.Vnode) {
-    this.pageState = PageState.OK
+    this.pageState = PageState.OK;
   }
 
   componentToDisplay(vnode: m.Vnode): m.Children {
-    return []
+    return [
+      <FillableSection sectionId="material">
+        <UserInputPane heading="Part 1: Material">
+          <p>Some content here</p>
+        </UserInputPane>
+        <ConceptDiagram conceptId="material">
+          A <strong>material</strong> triggers your pipeline to run. Typically this is a
+          <strong>source repository</strong> or an <strong>upstream pipeline</strong>.
+        </ConceptDiagram>
+      </FillableSection>,
+    ];
   }
 
   fetchData(vnode: m.Vnode): Promise<any> {
-    return new Promise(() => null)
+    return new Promise(() => null);
   }
 }

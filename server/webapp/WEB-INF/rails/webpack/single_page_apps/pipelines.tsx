@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import Page from "helpers/spa_base"
-import {PipelineCreatePage} from "views/pages/pipelines"
+import Page from "helpers/spa_base";
+import {PipelineCreatePage} from "views/pages/pipelines";
 
 export class PipelineCreateSPA extends Page {
   constructor() {
