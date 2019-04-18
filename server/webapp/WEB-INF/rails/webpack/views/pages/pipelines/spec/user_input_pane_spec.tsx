@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {bind} from "classnames/bind";
 import * as m from "mithril";
 import {TestHelper} from "views/pages/spec/test_helper";

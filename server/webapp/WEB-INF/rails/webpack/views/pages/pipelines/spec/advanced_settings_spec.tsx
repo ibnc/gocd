@@ -17,32 +17,32 @@
 import {bind} from "classnames/bind";
 import * as m from "mithril";
 import {TestHelper} from "views/pages/spec/test_helper";
+import {AdvancedSettings} from "../advanced_settings";
 import * as styles from "../components.scss";
-import {FillableSection} from "../fillable_section";
 
-describe("AddPipeline: FillableSection", () => {
+describe("AddPipeline: AdvancedSettings", () => {
   const helper = new TestHelper();
   const cls = bind(styles);
-  const sectionId = "huh";
 
   beforeEach(() => {
     helper.mount(() => {
-      return <FillableSection sectionId={sectionId}>
+      return <AdvancedSettings>
         <span class="foo">Some content</span>
-      </FillableSection>;
+      </AdvancedSettings>;
     });
   });
 
   afterEach(helper.unmount.bind(helper));
 
-  it("Generates structure marked with section ID", () => {
-    const top = helper.find(`.${cls(styles.fillable)}`)[0];
+  it("Generates element hierarchy", () => {
+    const top = helper.find(`.${cls(styles.advanced)}`)[0];
     expect(top).toBeTruthy();
-    expect(top!.matches(`.${sectionId}`)).toBe(true);
+    expect(top.querySelector("summary")).toBeTruthy();
+    expect(top.querySelector("summary")!.textContent).toBe("Advanced Settings");
   });
 
   it("Renders child elements", () => {
-    const top = helper.find(`.${cls(styles.fillable)}`)[0];
+    const top = helper.find(`.${cls(styles.advanced)}`)[0];
     expect(top.querySelector(".foo")).toBeTruthy();
     expect(top.querySelector(".foo")!.textContent).toBe("Some content");
   });

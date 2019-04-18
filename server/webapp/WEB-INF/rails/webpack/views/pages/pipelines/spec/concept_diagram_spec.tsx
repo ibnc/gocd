@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import * as m from "mithril";
 import {TestHelper} from "views/pages/spec/test_helper";
 import {ConceptDiagram} from "../concept_diagram";
 
 describe("AddPipeline: ConceptDiagram", () => {
   const helper = new TestHelper();
-  const conceptId = "foo";
+  const image = require("../../../../../app/assets/images/go_logo.svg");
 
   beforeEach(() => {
-    helper.mount(() => <ConceptDiagram conceptId={conceptId}>A <strong>simple</strong> explanation</ConceptDiagram>);
+    helper.mount(() => <ConceptDiagram image={image}>A <strong>simple</strong> explanation</ConceptDiagram>);
   });
 
   afterEach(helper.unmount.bind(helper));
 
-  it("Generates an element marked with the concept ID", () => {
-    expect(helper.find(`figure.${conceptId}`)).not.toBeNull();
+  it("Renders the concept diagram SVG", () => {
+    const img = helper.find(`object[type="image/svg+xml"]`)[0];
+    expect(img).toBeTruthy();
+    expect(img.getAttribute("data")).toBe(image);
   });
 
   it("Renders the concept diagram caption", () => {

@@ -63,7 +63,34 @@
   }
 }
 
+.advanced {
+  padding: 5px 0;
+  border-bottom: 1px solid darken($line-color, 20%);;
+  border-top: 1px solid darken($line-color, 20%);;
+
+  summary {
+    cursor: pointer;
+    outline: none;
+  }
+
+  &[open] {
+    padding-bottom: 30px;
+    summary {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+
 .concept-diagram {
+  width: 485px;
+  margin: 0;
+  padding: 0;
+
+  object {
+    background-color: $white;
+  }
+
   figcaption {
     font-size: 16px;
     text-align: center;

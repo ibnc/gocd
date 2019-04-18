@@ -21,14 +21,11 @@ import * as styles from "./components.scss";
 
 const cls = bind(styles);
 
-interface Attrs {
-  sectionId: string;
-}
-
-export class FillableSection extends MithrilViewComponent<Attrs> {
-  view(vnode: m.Vnode<Attrs>): m.Children | void | null {
-    return <article className={cls(styles.fillable, vnode.attrs.sectionId)}>
+export class AdvancedSettings extends MithrilViewComponent {
+  view(vnode: m.Vnode): m.Children | void | null {
+    return <details className={cls(styles.advanced)}>
+      <summary>Advanced Settings</summary>
       {vnode.children}
-    </article>;
+    </details>;
   }
 }

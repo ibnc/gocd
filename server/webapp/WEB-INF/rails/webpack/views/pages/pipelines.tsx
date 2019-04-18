@@ -16,9 +16,15 @@
 
 import * as m from "mithril";
 import {Page, PageState} from "views/pages/page";
+import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
 import {UserInputPane} from "views/pages/pipelines/user_input_pane";
+
+const materialImg = require("../../../app/assets/images/concept_diagrams/concept_material.svg");
+const pipelineImg = require("../../../app/assets/images/concept_diagrams/concept_pipeline.svg");
+const stageImg    = require("../../../app/assets/images/concept_diagrams/concept_stage.svg");
+const jobImg      = require("../../../app/assets/images/concept_diagrams/concept_job.svg");
 
 export class PipelineCreatePage extends Page {
   pageName(): string {
@@ -33,13 +39,55 @@ export class PipelineCreatePage extends Page {
     return [
       <FillableSection sectionId="material">
         <UserInputPane heading="Part 1: Material">
-          <p>Some content here</p>
+          <p>Form fields go here</p>
+          <AdvancedSettings>
+            More to come...
+          </AdvancedSettings>
         </UserInputPane>
-        <ConceptDiagram conceptId="material">
+        <ConceptDiagram image={materialImg}>
           A <strong>material</strong> triggers your pipeline to run. Typically this is a
           <strong>source repository</strong> or an <strong>upstream pipeline</strong>.
         </ConceptDiagram>
       </FillableSection>,
+
+      <FillableSection sectionId="pipeline">
+        <UserInputPane heading="Part 2: Pipeline Name">
+          <p>Form fields go here</p>
+          <AdvancedSettings>
+            More to come...
+          </AdvancedSettings>
+        </UserInputPane>
+        <ConceptDiagram image={pipelineImg}>
+          In GoCD, a <strong>pipeline</strong> is a representation of a <strong>workflow</strong>.
+          Pipelines consist of one or more <strong>stages</strong>.
+        </ConceptDiagram>
+      </FillableSection>,
+
+      <FillableSection sectionId="stage">
+        <UserInputPane heading="Part 3: Stage Details">
+          <p>Form fields go here</p>
+          <AdvancedSettings>
+            More to come...
+          </AdvancedSettings>
+        </UserInputPane>
+        <ConceptDiagram image={stageImg}>
+          A <strong>stage</strong> is a group of jobs, and a <strong>job</strong> is a
+          piece of work to execute.
+        </ConceptDiagram>
+      </FillableSection>,
+
+      <FillableSection sectionId="job">
+        <UserInputPane heading="Part 4: Job and Tasks">
+          <p>Form fields go here</p>
+          <AdvancedSettings>
+            More to come...
+          </AdvancedSettings>
+        </UserInputPane>
+        <ConceptDiagram image={jobImg}>
+          A <strong>job</strong> is like a script, where each sequential step is called
+          a <strong>task</strong>. Typically, a task is a single command.
+        </ConceptDiagram>
+      </FillableSection>
     ];
   }
 

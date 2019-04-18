@@ -6,4 +6,5 @@ export const sectionHeading: string;
 export const sectionNote: string;
 export const attention: string;
 export const userInput: string;
+export const advanced: string;
 export const conceptDiagram: string;
