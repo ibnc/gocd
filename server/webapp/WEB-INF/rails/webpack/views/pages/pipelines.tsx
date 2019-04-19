@@ -18,6 +18,7 @@ import * as m from "mithril";
 import {GitMaterialAttributes, Material} from "models/materials/types";
 import {TestConnection} from "views/components/materials/test_connection";
 import {Page, PageState} from "views/pages/page";
+import {PipelineActions} from "views/pages/pipelines/actions";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
@@ -91,7 +92,10 @@ export class PipelineCreatePage extends Page {
           A <strong>job</strong> is like a script, where each sequential step is called
           a <strong>task</strong>. Typically, a task is a single command.
         </ConceptDiagram>
-      </FillableSection>
+      </FillableSection>,
+
+      <PipelineActions/>
+
     ];
   }
 
