@@ -15,6 +15,8 @@
  */
 
 import * as m from "mithril";
+import {GitMaterialAttributes, Material} from "models/materials/types";
+import {TestConnection} from "views/components/materials/test_connection";
 import {Page, PageState} from "views/pages/page";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
@@ -25,6 +27,7 @@ const materialImg = require("../../../app/assets/images/concept_diagrams/concept
 const pipelineImg = require("../../../app/assets/images/concept_diagrams/concept_pipeline.svg");
 const stageImg    = require("../../../app/assets/images/concept_diagrams/concept_stage.svg");
 const jobImg      = require("../../../app/assets/images/concept_diagrams/concept_job.svg");
+const dummyMaterial = new Material("git", new GitMaterialAttributes("SomeRepo", false, "https://github.com/gocd/gocd", "master"));
 
 export class PipelineCreatePage extends Page {
   pageName(): string {
@@ -40,6 +43,7 @@ export class PipelineCreatePage extends Page {
       <FillableSection sectionId="material">
         <UserInputPane heading="Part 1: Material">
           <p>Form fields go here</p>
+          <TestConnection material={dummyMaterial}/>
           <AdvancedSettings>
             More to come...
           </AdvancedSettings>
