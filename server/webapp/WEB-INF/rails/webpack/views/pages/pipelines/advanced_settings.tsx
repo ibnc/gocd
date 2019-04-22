@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-import {bind} from "classnames/bind";
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
-import * as styles from "./components.scss";
-
-const cls = bind(styles);
+import * as css from "./components.scss";
 
 export class AdvancedSettings extends MithrilViewComponent {
+  oncreate(vnode: m.VnodeDOM) {
+    const el = vnode.dom;
+    el!.querySelector("dt")!.addEventListener("click", () => {
+      el.classList.toggle(css.open);
+    });
+  }
+
   view(vnode: m.Vnode): m.Children | void | null {
-    return <details className={cls(styles.advanced)}>
-      <summary>Advanced Settings</summary>
-      {vnode.children}
-    </details>;
+    return <dl class={css.advancedSettings}>
+      <dt class={css.summary}>Advanced Settings</dt>
+      <dd class={css.details}>{vnode.children}</dd>
+    </dl>;
   }
 }

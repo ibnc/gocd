@@ -84,20 +84,35 @@
   }
 }
 
-.advanced {
+.advanced-settings {
+  margin: 0;
   padding: 5px 0;
   border-bottom: 1px solid darken($line-color, 20%);;
   border-top: 1px solid darken($line-color, 20%);;
 
-  summary {
+  .summary {
+    @include icon-before($type: $fa-var-play, $color: lighten($text-color, 30%), $size: 16px, $line-height: 25px, $margin: 0 5px);
+
+    line-height: 25px;
     cursor: pointer;
     outline: none;
   }
 
-  &[open] {
-    padding-bottom: 30px;
-    summary {
+  .details {
+    margin: 0;
+    padding: 0;
+    display: none;
+  }
+
+  &.open {
+    .summary {
       margin-bottom: 15px;
+
+      &:before {
+        transform: rotate(90deg);
+      }
     }
+
+    .details { display: block; }
   }
 }

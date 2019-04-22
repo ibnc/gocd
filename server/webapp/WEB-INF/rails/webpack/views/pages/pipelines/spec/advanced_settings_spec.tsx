@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import {bind} from "classnames/bind";
 import * as m from "mithril";
+import * as events from "simulate-event";
 import {TestHelper} from "views/pages/spec/test_helper";
 import {AdvancedSettings} from "../advanced_settings";
-import * as styles from "../components.scss";
+import * as css from "../components.scss";
 
 describe("AddPipeline: AdvancedSettings", () => {
   const helper = new TestHelper();
-  const cls = bind(styles);
 
   beforeEach(() => {
     helper.mount(() => {
@@ -34,16 +33,28 @@ describe("AddPipeline: AdvancedSettings", () => {
 
   afterEach(helper.unmount.bind(helper));
 
-  it("Generates element hierarchy", () => {
-    const top = helper.find(`.${cls(styles.advanced)}`)[0];
+  it("Generates element hierarchy and child elements", () => {
+    const top = helper.find(`.${css.advancedSettings}`)[0];
     expect(top).toBeTruthy();
-    expect(top.querySelector("summary")).toBeTruthy();
-    expect(top.querySelector("summary")!.textContent).toBe("Advanced Settings");
+    expect(top.querySelector(`.${css.summary}`)).toBeTruthy();
+    expect(top.querySelector(`.${css.summary}`)!.textContent).toBe("Advanced Settings");
+
+    expect(top.querySelector(`.${css.details}`)).toBeTruthy();
+    expect(top.querySelector(`.${css.details} .foo`)).toBeTruthy();
+    expect(top.querySelector(`.${css.details} .foo`)!.textContent).toBe("Some content");
   });
 
-  it("Renders child elements", () => {
-    const top = helper.find(`.${cls(styles.advanced)}`)[0];
-    expect(top.querySelector(".foo")).toBeTruthy();
-    expect(top.querySelector(".foo")!.textContent).toBe("Some content");
+  it("Clicking toggles the open class", () => {
+    const top = helper.find(`.${css.advancedSettings}`)[0];
+    expect(top.classList.contains(css.open)).toBe(false);
+    expect(window.getComputedStyle(top.querySelector(`.${css.details}`)!).display).toBe("none");
+
+    events.simulate(top.querySelector(`.${css.summary}`)!, "click");
+    expect(top.classList.contains(css.open)).toBe(true);
+    expect(window.getComputedStyle(top.querySelector(`.${css.details}`)!).display).toBe("block");
+
+    events.simulate(top.querySelector(`.${css.summary}`)!, "click");
+    expect(top.classList.contains(css.open)).toBe(false);
+    expect(window.getComputedStyle(top.querySelector(`.${css.details}`)!).display).toBe("none");
   });
 });
