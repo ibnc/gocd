@@ -18,17 +18,17 @@ import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
 import {Form, FormBody} from "views/components/forms/form";
 import {TextField} from "views/components/forms/input_fields";
+import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 
-// temporary until PipelineConfig model is available
-import {Stream} from "mithril/stream";
-import * as stream from "mithril/stream";
-const destDir: Stream<string> = stream();
+interface Attrs {
+  pipelineConfig: PipelineConfig;
+}
 
-export class PipelineInfoEditor extends MithrilViewComponent {
-  view(vnode: m.Vnode) {
+export class PipelineInfoEditor extends MithrilViewComponent<Attrs> {
+  view(vnode: m.Vnode<Attrs>) {
     return <FormBody>
       <Form last={true} compactForm={true}>
-        <TextField label="Pipeline Name" placeholder="e.g., My-New-Pipeline" required={true} property={destDir}/>
+        <TextField label="Pipeline Name" placeholder="e.g., My-New-Pipeline" required={true} property={vnode.attrs.pipelineConfig.name}/>
       </Form>
     </FormBody>;
 

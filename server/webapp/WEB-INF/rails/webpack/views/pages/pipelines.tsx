@@ -16,6 +16,7 @@
 
 import * as m from "mithril";
 import {GitMaterialAttributes, Material} from "models/materials/types";
+import {PipelineConfigs} from "models/pipeline_configs/pipeline_config";
 import {Page, PageState} from "views/pages/page";
 import {PipelineActions} from "views/pages/pipelines/actions";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
@@ -24,6 +25,7 @@ import {FillableSection} from "views/pages/pipelines/fillable_section";
 import {MaterialEditor} from "views/pages/pipelines/material_editor";
 import {PipelineInfoEditor} from "views/pages/pipelines/pipeline_info_editor";
 import {UserInputPane} from "views/pages/pipelines/user_input_pane";
+import * as s from "underscore.string";
 
 const materialImg = require("../../../app/assets/images/concept_diagrams/concept_material.svg");
 const pipelineImg = require("../../../app/assets/images/concept_diagrams/concept_pipeline.svg");
@@ -33,6 +35,7 @@ const jobImg      = require("../../../app/assets/images/concept_diagrams/concept
 export class PipelineCreatePage extends Page {
   // temporary until we get a PipelineConfig model
   private material: Material = new Material("git", new GitMaterialAttributes());
+  private model: PipelineConfigs = new PipelineConfigs();
 
   pageName(): string {
     return "Add a New Pipeline";
@@ -40,6 +43,10 @@ export class PipelineCreatePage extends Page {
 
   oninit(vnode: m.Vnode) {
     this.pageState = PageState.OK;
+    const group = m.parseQueryString(window.location.search).group;
+    if (!s.isBlank(group)) {
+      this.model.group(group);
+    }
   }
 
   componentToDisplay(vnode: m.Vnode): m.Children {
@@ -56,7 +63,7 @@ export class PipelineCreatePage extends Page {
 
       <FillableSection sectionId="pipeline">
         <UserInputPane heading="Part 2: Pipeline Name">
-          <PipelineInfoEditor/>
+          <PipelineInfoEditor pipelineConfig={this.model.pipeline()}/>
         </UserInputPane>
         <ConceptDiagram image={pipelineImg}>
           In GoCD, a <strong>pipeline</strong> is a representation of a <strong>workflow</strong>.
@@ -90,7 +97,7 @@ export class PipelineCreatePage extends Page {
         </ConceptDiagram>
       </FillableSection>,
 
-      <PipelineActions/>
+      <PipelineActions pipelineConfigs={this.model}/>
 
     ];
   }

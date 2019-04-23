@@ -33,6 +33,30 @@ import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
 //   type: Stream<string>;
 // }
 
+// TODO: think of a better class name
+export class PipelineConfigs extends ValidatableMixin {
+  group: Stream<string> = stream("defaultGroup");
+  pipeline: Stream<PipelineConfig> = stream(new PipelineConfig(""));
+
+  constructor() {
+    super();
+    ValidatableMixin.call(this);
+    this.validatePresenceOf("group");
+    this.validateAssociated("pipeline");
+  }
+
+  getPipelineName() {
+    return this.pipeline().name();
+  }
+
+  toJSON() {
+    return {
+      group: this.group(),
+      pipeline: this.pipeline().toJSON()
+    };
+  }
+}
+
 export class PipelineConfig extends ValidatableMixin {
   name: Stream<string>;
   // materials: Stream<Material[]>;
@@ -46,6 +70,12 @@ export class PipelineConfig extends ValidatableMixin {
     // this.materials = stream(materials);
     // this.validateAssociated("materials");
     // this.validateAssociated("stages");
+  }
+
+  toJSON() {
+    return {
+      name: this.name()
+    };
   }
 }
 
