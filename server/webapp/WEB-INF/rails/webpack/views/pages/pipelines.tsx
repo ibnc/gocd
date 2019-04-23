@@ -33,9 +33,8 @@ const stageImg    = require("../../../app/assets/images/concept_diagrams/concept
 const jobImg      = require("../../../app/assets/images/concept_diagrams/concept_job.svg");
 
 export class PipelineCreatePage extends Page {
-  // temporary until we get a PipelineConfig model
   private material: Material = new Material("git", new GitMaterialAttributes());
-  private model: PipelineConfig = new PipelineConfig("", []);
+  private model: PipelineConfig = new PipelineConfig("", [this.material]);
 
   pageName(): string {
     return "Add a New Pipeline";
