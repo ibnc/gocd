@@ -22,6 +22,7 @@ import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
 import {MaterialEditor} from "views/pages/pipelines/material_editor";
+import {PipelineInfoEditor} from "views/pages/pipelines/pipeline_info_editor";
 import {UserInputPane} from "views/pages/pipelines/user_input_pane";
 
 const materialImg = require("../../../app/assets/images/concept_diagrams/concept_material.svg");
@@ -55,10 +56,7 @@ export class PipelineCreatePage extends Page {
 
       <FillableSection sectionId="pipeline">
         <UserInputPane heading="Part 2: Pipeline Name">
-          <p>Form fields go here</p>
-          <AdvancedSettings>
-            More to come...
-          </AdvancedSettings>
+          <PipelineInfoEditor/>
         </UserInputPane>
         <ConceptDiagram image={pipelineImg}>
           In GoCD, a <strong>pipeline</strong> is a representation of a <strong>workflow</strong>.
