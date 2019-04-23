@@ -1,4 +1,5 @@
 import {MithrilViewComponent} from "jsx/mithril-component";
+import * as Routes from "gen/ts-routes";
 import * as m from "mithril";
 import * as Buttons from "views/components/buttons";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
@@ -29,7 +30,20 @@ export class PipelineActions extends MithrilViewComponent<Attrs> {
   onSave(shouldPause: boolean, pipelineConfig: PipelineConfig, event: Event): void {
     event.stopPropagation();
     if (pipelineConfig.isValid()) {
-      pipelineConfig.create(shouldPause);
+      pipelineConfig.create().then((response) => {
+        response.getOrThrow();
+        if (shouldPause) {
+          pipelineConfig.pause().then(() => {
+            window.location.href = Routes.pipelineEditPath("pipelines", pipelineConfig.name(), "general");
+          });
+        } else  {
+          window.location.href = "/go/pipelines";
+        }
+      }).catch((reason) => {
+        //TODO: add some error handling
+        //tslint:disable-next-line
+        console.log(reason);
+      });
     }
   }
 }
