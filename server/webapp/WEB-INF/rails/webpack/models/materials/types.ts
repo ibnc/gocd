@@ -120,6 +120,7 @@ applyMixins(Material, ValidatableMixin);
 export abstract class MaterialAttributes implements ValidatableMixin {
   username: Stream<string>;
   password: Stream<EncryptedValue>;
+  name: Stream<string>;
   autoUpdate: Stream<boolean>;
 
   protected constructor(name?: string,
@@ -127,6 +128,7 @@ export abstract class MaterialAttributes implements ValidatableMixin {
                         username?: string,
                         password?: string,
                         encryptedPassword?: string) {
+    this.name = stream(name);
     this.autoUpdate = stream(autoUpdate);
     this.username   = stream(username);
     this.password   = stream(plainOrCipherValue({plainText: password, cipherText: encryptedPassword}));

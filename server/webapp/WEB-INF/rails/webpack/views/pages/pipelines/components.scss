@@ -16,6 +16,12 @@
 
 @import "../../global/common";
 
+$diagram-width: 485px;
+
+.material-selector {
+  margin: 0 0 10px;
+}
+
 .fillable, .actions {
   background-color: $white;
   max-width: 1200px;
@@ -68,7 +74,7 @@
 }
 
 .concept-diagram {
-  width: 485px;
+  width: $diagram-width;
   margin: 0;
   padding: 0;
 
@@ -85,6 +91,9 @@
 }
 
 .advanced-settings {
+  display: block;
+  width: 100%;
+
   margin: 0;
   padding: 5px 0;
   border-bottom: 1px solid darken($line-color, 20%);;

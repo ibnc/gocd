@@ -16,21 +16,23 @@
 
 import * as m from "mithril";
 import {GitMaterialAttributes, Material} from "models/materials/types";
-import {TestConnection} from "views/components/materials/test_connection";
 import {Page, PageState} from "views/pages/page";
 import {PipelineActions} from "views/pages/pipelines/actions";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
+import {MaterialEditor} from "views/pages/pipelines/material_editor";
 import {UserInputPane} from "views/pages/pipelines/user_input_pane";
 
 const materialImg = require("../../../app/assets/images/concept_diagrams/concept_material.svg");
 const pipelineImg = require("../../../app/assets/images/concept_diagrams/concept_pipeline.svg");
 const stageImg    = require("../../../app/assets/images/concept_diagrams/concept_stage.svg");
 const jobImg      = require("../../../app/assets/images/concept_diagrams/concept_job.svg");
-const dummyMaterial = new Material("git", new GitMaterialAttributes("SomeRepo", false, "https://github.com/gocd/gocd", "master"));
 
 export class PipelineCreatePage extends Page {
+  // temporary until we get a PipelineConfig model
+  private material: Material = new Material("git", new GitMaterialAttributes());
+
   pageName(): string {
     return "Add a New Pipeline";
   }
@@ -43,11 +45,7 @@ export class PipelineCreatePage extends Page {
     return [
       <FillableSection sectionId="material">
         <UserInputPane heading="Part 1: Material">
-          <p>Form fields go here</p>
-          <TestConnection material={dummyMaterial}/>
-          <AdvancedSettings>
-            More to come...
-          </AdvancedSettings>
+          <MaterialEditor material={this.material}/>
         </UserInputPane>
         <ConceptDiagram image={materialImg}>
           A <strong>material</strong> triggers your pipeline to run. Typically this is a
