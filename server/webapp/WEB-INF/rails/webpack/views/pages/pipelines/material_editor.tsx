@@ -17,11 +17,10 @@
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
 import {GitMaterialAttributes, HgMaterialAttributes, Material, MaterialAttributes} from "models/materials/types";
-import {Form} from "views/components/forms/form";
+import {Form, FormBody} from "views/components/forms/form";
 import {Option, SelectField, SelectFieldOptions, TextField} from "views/components/forms/input_fields";
 import {TestConnection} from "views/components/materials/test_connection";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
-import * as css from "./components.scss";
 
 // temporary until PipelineConfig model is available
 import {Stream} from "mithril/stream";
@@ -34,14 +33,16 @@ interface Attrs {
 
 export class MaterialEditor extends MithrilViewComponent<Attrs> {
   view(vnode: m.Vnode<Attrs>) {
-    return <Form last={true}>
-      <div class={css.materialSelector}>
-        <SelectField label="Material Type"property={vnode.attrs.material.type} required={true}>
-          <SelectFieldOptions selected={vnode.attrs.material.type()} items={this.supportedMaterials()}/>
-        </SelectField>
-      </div>
-      {this.fieldsForType(vnode.attrs.material)}
-    </Form>;
+    return <FormBody>
+      <SelectField label="Material Type"property={vnode.attrs.material.type} required={true}>
+        <SelectFieldOptions selected={vnode.attrs.material.type()} items={this.supportedMaterials()}/>
+      </SelectField>
+
+      <Form last={true} compactForm={true}>
+        {this.fieldsForType(vnode.attrs.material)}
+      </Form>
+    </FormBody>;
+
   }
 
   supportedMaterials(): Option[] {
