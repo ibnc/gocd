@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
+import SparkRoutes from "helpers/spark_routes";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
+import {Material} from "models/materials/types";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
-import SparkRoutes from "helpers/spark_routes";
-import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
+import {MaterialSet, NonEmptySetValidator} from "./material_set";
 
 /* Move these to another file? */
 // export interface Stage extends ValidatableMixin {
@@ -38,18 +40,19 @@ import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
 export class PipelineConfig extends ValidatableMixin {
   group: Stream<string> = stream("defaultGroup");
   name: Stream<string>;
-  // materials: Stream<Material[]>;
+  materials: Stream<MaterialSet>;
 
-  constructor(name: string) {
+  constructor(name: string, materials: Material[]) {
     super();
+
     ValidatableMixin.call(this);
     this.name = stream(name);
     this.validatePresenceOf("name");
     this.validatePresenceOf("group");
 
-    // this.materials = stream(materials);
-    // this.validateAssociated("materials");
-    // this.validateAssociated("stages");
+    this.materials = stream(new MaterialSet(materials));
+    this.validateWith(new NonEmptySetValidator({message: `A pipeline must have at least one material.`}), "materials");
+    this.validateAssociated("materials");
   }
 
   create() {
@@ -71,4 +74,3 @@ export class PipelineConfig extends ValidatableMixin {
     };
   }
 }
-

@@ -1,5 +1,5 @@
-import {MithrilViewComponent} from "jsx/mithril-component";
 import * as Routes from "gen/ts-routes";
+import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import * as Buttons from "views/components/buttons";

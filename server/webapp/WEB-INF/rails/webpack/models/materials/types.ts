@@ -83,6 +83,10 @@ export class Material implements ValidatableMixin {
     this.validateAssociated("attributes");
   }
 
+  name(): string {
+    return this.attributes().name() || "";
+  }
+
   typeProxy(value?: any): string {
     if (arguments.length > 0) {
       const newType = value;
