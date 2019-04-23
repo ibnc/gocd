@@ -16,7 +16,7 @@
 
 import * as m from "mithril";
 import {GitMaterialAttributes, Material} from "models/materials/types";
-import {PipelineConfigs} from "models/pipeline_configs/pipeline_config";
+import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import {Page, PageState} from "views/pages/page";
 import {PipelineActions} from "views/pages/pipelines/actions";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
@@ -35,7 +35,7 @@ const jobImg      = require("../../../app/assets/images/concept_diagrams/concept
 export class PipelineCreatePage extends Page {
   // temporary until we get a PipelineConfig model
   private material: Material = new Material("git", new GitMaterialAttributes());
-  private model: PipelineConfigs = new PipelineConfigs();
+  private model: PipelineConfig = new PipelineConfig("");
 
   pageName(): string {
     return "Add a New Pipeline";
@@ -63,7 +63,7 @@ export class PipelineCreatePage extends Page {
 
       <FillableSection sectionId="pipeline">
         <UserInputPane heading="Part 2: Pipeline Name">
-          <PipelineInfoEditor pipelineConfig={this.model.pipeline()}/>
+          <PipelineInfoEditor pipelineConfig={this.model}/>
         </UserInputPane>
         <ConceptDiagram image={pipelineImg}>
           In GoCD, a <strong>pipeline</strong> is a representation of a <strong>workflow</strong>.
@@ -97,7 +97,7 @@ export class PipelineCreatePage extends Page {
         </ConceptDiagram>
       </FillableSection>,
 
-      <PipelineActions pipelineConfigs={this.model}/>
+      <PipelineActions pipelineConfig={this.model}/>
 
     ];
   }

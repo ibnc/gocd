@@ -36,20 +36,21 @@ import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
 //   type: Stream<string>;
 // }
 
-// TODO: think of a better class name
-export class PipelineConfigs extends ValidatableMixin {
+export class PipelineConfig extends ValidatableMixin {
   group: Stream<string> = stream("defaultGroup");
-  pipeline: Stream<PipelineConfig> = stream(new PipelineConfig(""));
+  name: Stream<string>;
+  // materials: Stream<Material[]>;
 
-  constructor() {
+  constructor(name: string) {
     super();
     ValidatableMixin.call(this);
+    this.name = stream(name);
+    this.validatePresenceOf("name");
     this.validatePresenceOf("group");
-    this.validateAssociated("pipeline");
-  }
 
-  getPipelineName() {
-    return this.pipeline().name();
+    // this.materials = stream(materials);
+    // this.validateAssociated("materials");
+    // this.validateAssociated("stages");
   }
 
   create(shouldPause: boolean) {
@@ -58,7 +59,7 @@ export class PipelineConfigs extends ValidatableMixin {
     }).then((response) => {
       response.getOrThrow();
       if (shouldPause) {
-        this.pipeline().pause();
+        this.pause();
       } else  {
         window.location.href = "/go/pipelines";
       }
@@ -69,29 +70,6 @@ export class PipelineConfigs extends ValidatableMixin {
     });
   }
 
-  toJSON() {
-    return {
-      group: this.group(),
-      pipeline: this.pipeline().toJSON()
-    };
-  }
-}
-
-export class PipelineConfig extends ValidatableMixin {
-  name: Stream<string>;
-  // materials: Stream<Material[]>;
-
-  constructor(name: string) {
-    super();
-    ValidatableMixin.call(this);
-    this.name = stream(name);
-    this.validatePresenceOf("name");
-
-    // this.materials = stream(materials);
-    // this.validateAssociated("materials");
-    // this.validateAssociated("stages");
-  }
-
   pause() {
     ApiRequestBuilder.POST(SparkRoutes.pipelinePausePath(this.name()), ApiVersion.v1).then(() => {
       window.location.href = Routes.pipelineEditPath("pipelines", this.name(), "general");
@@ -100,7 +78,10 @@ export class PipelineConfig extends ValidatableMixin {
 
   toJSON() {
     return {
-      name: this.name()
+      group: this.group(),
+      pipeline: {
+        name: this.name()
+      }
     };
   }
 }
