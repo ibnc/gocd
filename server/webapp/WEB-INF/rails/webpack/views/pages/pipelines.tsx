@@ -17,6 +17,7 @@
 import * as m from "mithril";
 import {GitMaterialAttributes, Material} from "models/materials/types";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
+import * as s from "underscore.string";
 import {Page, PageState} from "views/pages/page";
 import {PipelineActions} from "views/pages/pipelines/actions";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
@@ -25,7 +26,6 @@ import {FillableSection} from "views/pages/pipelines/fillable_section";
 import {MaterialEditor} from "views/pages/pipelines/material_editor";
 import {PipelineInfoEditor} from "views/pages/pipelines/pipeline_info_editor";
 import {UserInputPane} from "views/pages/pipelines/user_input_pane";
-import * as s from "underscore.string";
 
 const materialImg = require("../../../app/assets/images/concept_diagrams/concept_material.svg");
 const pipelineImg = require("../../../app/assets/images/concept_diagrams/concept_pipeline.svg");

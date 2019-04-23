@@ -1,9 +1,9 @@
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as Routes from "gen/ts-routes";
 import * as m from "mithril";
+import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import * as Buttons from "views/components/buttons";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
-import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 
 interface Attrs {
   pipelineConfig: PipelineConfig;

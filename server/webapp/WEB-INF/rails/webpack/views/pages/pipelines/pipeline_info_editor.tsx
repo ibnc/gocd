@@ -16,9 +16,9 @@
 
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
+import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import {Form, FormBody} from "views/components/forms/form";
 import {TextField} from "views/components/forms/input_fields";
-import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 
 interface Attrs {
   pipelineConfig: PipelineConfig;
