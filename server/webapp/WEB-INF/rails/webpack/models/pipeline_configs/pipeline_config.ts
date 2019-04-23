@@ -16,38 +16,36 @@
 
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
-import {Material} from "models/materials/types";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
 
-export interface Stage extends ValidatableMixin {
-  name: Stream<string>;
-  jobs: Stream<Job[]>;
-}
+/* Move these to another file? */
+// export interface Stage extends ValidatableMixin {
+//   name: Stream<string>;
+//   jobs: Stream<Job[]>;
+// }
 
-interface Job extends ValidatableMixin {
-  name: Stream<string>;
-  tasks: Stream<Task[]>;
-}
+// interface Job extends ValidatableMixin {
+//   name: Stream<string>;
+//   tasks: Stream<Task[]>;
+// }
 
-interface Task extends ValidatableMixin {
-  type: Stream<string>;
-}
+// interface Task extends ValidatableMixin {
+//   type: Stream<string>;
+// }
 
 export class PipelineConfig extends ValidatableMixin {
   name: Stream<string>;
-  materials: Stream<Material[]>;
-  stages: Stream<Stage[]>;
+  // materials: Stream<Material[]>;
 
-  constructor(name: string,
-              materials: Material[],
-              stages: Stage[]) {
+  constructor(name: string) {
     super();
     ValidatableMixin.call(this);
     this.name = stream(name);
-    this.materials = stream(materials);
-    this.stages = stream(stages)
     this.validatePresenceOf("name");
-    this.validateAssociated("materials");
-    this.validateAssociated("stages");
+
+    // this.materials = stream(materials);
+    // this.validateAssociated("materials");
+    // this.validateAssociated("stages");
   }
 }
+

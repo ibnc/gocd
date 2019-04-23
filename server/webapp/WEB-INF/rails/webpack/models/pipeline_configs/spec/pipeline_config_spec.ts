@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-import {GitMaterialAttributes, Material} from "models/materials/types";
+// import {GitMaterialAttributes, Material} from "models/materials/types";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 
-
-describe("PipelineConfig", () => {
+describe("PipelineConfig model", () => {
   it("should include a name", () => {
-    let pip = new PipelineConfig("name", [], []);
+    let pip = new PipelineConfig("name");
     expect(pip.isValid()).toBe(true);
     expect(pip.errors().count()).toBe(0);
 
-    pip = new PipelineConfig("", [], []);
+    pip = new PipelineConfig("");
     expect(pip.isValid()).toBe(false);
     expect(pip.errors().count()).toBe(1);
   });
 
   xit("should include a material", () => {
-    let pip = new PipelineConfig("name", [new Material("git", new GitMaterialAttributes())], []);
+    let pip = new PipelineConfig("name", /*[new Material("git", new GitMaterialAttributes())], []*/);
     expect(pip.isValid()).toBe(true);
     expect(pip.errors().count()).toBe(0);
 
-    pip = new PipelineConfig("name", [], []);
+    pip = new PipelineConfig("name", /*[], []*/);
     expect(pip.isValid()).toBe(false);
     expect(pip.errors().count()).toBe(1);
   });
