@@ -16,16 +16,11 @@
 
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
-import {GitMaterialAttributes, HgMaterialAttributes, Material, MaterialAttributes} from "models/materials/types";
+import {GitMaterialAttributes, HgMaterialAttributes, Material, MaterialAttributes, P4MaterialAttributes, SvnMaterialAttributes, TfsMaterialAttributes} from "models/materials/types";
 import {Form, FormBody} from "views/components/forms/form";
-import {Option, SelectField, SelectFieldOptions, TextField} from "views/components/forms/input_fields";
+import {CheckboxField, Option, PasswordField, SelectField, SelectFieldOptions, TextField} from "views/components/forms/input_fields";
 import {TestConnection} from "views/components/materials/test_connection";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
-
-// temporary until PipelineConfig model is available
-import {Stream} from "mithril/stream";
-import * as stream from "mithril/stream";
-const destDir: Stream<string> = stream();
 
 interface Attrs {
   material: Material;
@@ -42,7 +37,6 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
         {this.fieldsForType(vnode.attrs.material)}
       </Form>
     </FormBody>;
-
   }
 
   supportedMaterials(): Option[] {
@@ -60,10 +54,34 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
   fieldsForType(material: Material): m.Children {
     switch (material.type()) {
       case "git":
-        return <GitFields material={material} />;
+        if (!(material.attributes() instanceof GitMaterialAttributes)) {
+          material.attributes(new GitMaterialAttributes());
+        }
+        return <GitFields material={material}/>;
         break;
       case "hg":
-        return <HgFields material={material} />;
+        if (!(material.attributes() instanceof HgMaterialAttributes)) {
+          material.attributes(new HgMaterialAttributes());
+        }
+        return <HgFields material={material}/>;
+        break;
+      case "svn":
+        if (!(material.attributes() instanceof SvnMaterialAttributes)) {
+          material.attributes(new SvnMaterialAttributes());
+        }
+        return <SvnFields material={material}/>;
+        break;
+      case "p4":
+        if (!(material.attributes() instanceof P4MaterialAttributes)) {
+          material.attributes(new P4MaterialAttributes());
+        }
+        return <P4Fields material={material}/>;
+        break;
+      case "tfs":
+        if (!(material.attributes() instanceof TfsMaterialAttributes)) {
+          material.attributes(new TfsMaterialAttributes());
+        }
+        return <TfsFields material={material}/>;
         break;
       default:
         break;
@@ -73,13 +91,14 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
 
 abstract class ScmFields extends MithrilViewComponent<Attrs> {
   view(vnode: m.Vnode<Attrs>): m.Children {
+    const mattrs = vnode.attrs.material.attributes();
     return [
-      this.requiredFields(vnode.attrs.material.attributes()),
-      <TestConnection material={vnode.attrs.material} />,
+      this.requiredFields(mattrs),
+      <TestConnection material={vnode.attrs.material}/>,
       <AdvancedSettings>
-        {this.extraFields(vnode.attrs.material.attributes())}
-        <TextField label="Alternate Checkout Path" property={destDir}/>
-        <TextField label="Material Name" placeholder="A human-friendly label for this material" property={vnode.attrs.material.attributes().name}/>
+        {this.extraFields(mattrs)}
+        <TextField label="Alternate Checkout Path" property={mattrs.destination}/>
+        <TextField label="Material Name" placeholder="A human-friendly label for this material" property={mattrs.name}/>
       </AdvancedSettings>
     ];
   }
@@ -91,22 +110,74 @@ abstract class ScmFields extends MithrilViewComponent<Attrs> {
 class GitFields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as GitMaterialAttributes;
-    return [<TextField label="Repository URL" property={mat.url} required={true} />];
+    return [<TextField label="Repository URL" property={mat.url} required={true}/>];
   }
 
   extraFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as GitMaterialAttributes;
-    return [<TextField label="Repository Branch" property={mat.branch} />];
+    return [<TextField label="Repository Branch" property={mat.branch}/>];
   }
 }
 
 class HgFields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as HgMaterialAttributes;
-    return [<TextField label="Repository URL" property={mat.url} required={true} />];
+    return [<TextField label="Repository URL" property={mat.url} required={true}/>];
   }
 
   extraFields(attrs: MaterialAttributes): m.Children {
     return [];
+  }
+}
+
+class SvnFields extends ScmFields {
+  requiredFields(attrs: MaterialAttributes): m.Children {
+    const mat = attrs as SvnMaterialAttributes;
+    return [<TextField label="Repository URL" property={mat.url} required={true}/>];
+  }
+
+  extraFields(attrs: MaterialAttributes): m.Children {
+    const mat = attrs as SvnMaterialAttributes;
+    return [
+      <TextField label="Username" property={mat.username}/>,
+      <PasswordField label="Password" property={mat.password}/>,
+      <CheckboxField label="Check Externals" property={mat.checkExternals}/>,
+    ];
+  }
+}
+
+class P4Fields extends ScmFields {
+  requiredFields(attrs: MaterialAttributes): m.Children {
+    const mat = attrs as P4MaterialAttributes;
+    return [
+      <TextField label="P4 [Protocol:][Host:]Port" property={mat.port} required={true}/>,
+      <TextField label="P4 View" property={mat.view} required={true}/>,
+    ];
+  }
+
+  extraFields(attrs: MaterialAttributes): m.Children {
+    const mat = attrs as P4MaterialAttributes;
+    return [
+      <TextField label="Username" property={mat.username}/>,
+      <PasswordField label="Password" property={mat.password}/>,
+      <CheckboxField label="Use Ticket Authentication" property={mat.useTickets}/>,
+    ];
+  }
+}
+
+class TfsFields extends ScmFields {
+  requiredFields(attrs: MaterialAttributes): m.Children {
+    const mat = attrs as TfsMaterialAttributes;
+    return [
+      <TextField label="Repository URL" property={mat.url} required={true}/>,
+      <TextField label="Project Path" property={mat.projectPath} required={true}/>,
+      <TextField label="Username" property={mat.username} required={true}/>,
+      <PasswordField label="Password" property={mat.password} required={true}/>,
+    ];
+  }
+
+  extraFields(attrs: MaterialAttributes): m.Children {
+    const mat = attrs as TfsMaterialAttributes;
+    return [<TextField label="Domain" property={mat.domain}/>];
   }
 }

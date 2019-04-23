@@ -28,6 +28,7 @@ export interface ScmAttributesJSON {
   username?: string;
   password?: string;
   encrypted_password?: string;
+  destination: string;
 }
 
 export interface GitMaterialAttributesJSON extends ScmAttributesJSON {
