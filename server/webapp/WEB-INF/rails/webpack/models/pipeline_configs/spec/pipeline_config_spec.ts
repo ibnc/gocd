@@ -15,7 +15,7 @@
  */
 
 import {GitMaterialAttributes, Material} from "models/materials/types";
-import {PipelineConfig, Stage} from "models/pipeline_configs/pipeline_config";
+import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 
 
 describe("PipelineConfig", () => {
