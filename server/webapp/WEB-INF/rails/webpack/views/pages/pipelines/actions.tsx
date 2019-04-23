@@ -1,6 +1,3 @@
-import * as Routes from "gen/ts-routes";
-import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
-import SparkRoutes from "helpers/spark_routes";
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
 import * as Buttons from "views/components/buttons";
@@ -31,29 +28,8 @@ export class PipelineActions extends MithrilViewComponent<Attrs> {
 
   onSave(shouldPause: boolean, pipelineConfigs: PipelineConfigs, event: Event): void {
     event.stopPropagation();
-
-    if (!pipelineConfigs.isValid()) {
-      //TODO Error handling
-      //eslint-ignore-line no-console
-      console.log(pipelineConfigs.errors());
-      return;
+    if (pipelineConfigs.isValid()) {
+      pipelineConfigs.create(shouldPause);
     }
-
-    ApiRequestBuilder.POST(SparkRoutes.pipelineConfigCreatePath(), ApiVersion.v6, {
-      payload: pipelineConfigs.toJSON()
-    }).then((response) => {
-      response.getOrThrow();
-      if (shouldPause) {
-        ApiRequestBuilder.POST(SparkRoutes.pipelinePausePath(pipelineConfigs.getPipelineName()), ApiVersion.v1).then(() => {
-          window.location.href = Routes.pipelineEditPath("pipelines", pipelineConfigs.getPipelineName(), "general");
-        });
-      } else  {
-        window.location.href = "/go/pipelines";
-      }
-    }).catch((reason) => {
-      //TODO: add some error handling
-      //tslint:disable-next-line
-      console.log(reason);
-    });
   }
 }

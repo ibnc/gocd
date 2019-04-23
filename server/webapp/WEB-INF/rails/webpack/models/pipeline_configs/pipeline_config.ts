@@ -17,6 +17,9 @@
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
+import * as Routes from "gen/ts-routes";
+import SparkRoutes from "helpers/spark_routes";
+import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
 
 /* Move these to another file? */
 // export interface Stage extends ValidatableMixin {
@@ -49,6 +52,23 @@ export class PipelineConfigs extends ValidatableMixin {
     return this.pipeline().name();
   }
 
+  create(shouldPause: boolean) {
+    ApiRequestBuilder.POST(SparkRoutes.pipelineConfigCreatePath(), ApiVersion.v6, {
+      payload: this.toJSON()
+    }).then((response) => {
+      response.getOrThrow();
+      if (shouldPause) {
+        this.pipeline().pause();
+      } else  {
+        window.location.href = "/go/pipelines";
+      }
+    }).catch((reason) => {
+      //TODO: add some error handling
+      //tslint:disable-next-line
+      console.log(reason);
+    });
+  }
+
   toJSON() {
     return {
       group: this.group(),
@@ -70,6 +90,12 @@ export class PipelineConfig extends ValidatableMixin {
     // this.materials = stream(materials);
     // this.validateAssociated("materials");
     // this.validateAssociated("stages");
+  }
+
+  pause() {
+    ApiRequestBuilder.POST(SparkRoutes.pipelinePausePath(this.name()), ApiVersion.v1).then(() => {
+      window.location.href = Routes.pipelineEditPath("pipelines", this.name(), "general");
+    });
   }
 
   toJSON() {
