@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+const _ = require('lodash');
+
 import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
 import SparkRoutes from "helpers/spark_routes";
 import {Stream} from "mithril/stream";
@@ -21,13 +23,9 @@ import * as stream from "mithril/stream";
 import {Material} from "models/materials/types";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
 import {MaterialSet, NonEmptySetValidator} from "./material_set";
+import {Stage} from "./stage";
 
 /* Move these to another file? */
-// export interface Stage extends ValidatableMixin {
-//   name: Stream<string>;
-//   jobs: Stream<Job[]>;
-// }
-
 // interface Job extends ValidatableMixin {
 //   name: Stream<string>;
 //   tasks: Stream<Task[]>;
@@ -41,14 +39,17 @@ export class PipelineConfig extends ValidatableMixin {
   group: Stream<string> = stream("defaultGroup");
   name: Stream<string>;
   materials: Stream<MaterialSet>;
+  stages: Stream<Stage[]>;
 
-  constructor(name: string, materials: Material[]) {
+  constructor(name: string, materials: Material[], stages: Stage[]) {
     super();
 
     ValidatableMixin.call(this);
     this.name = stream(name);
+    this.stages = stream(stages);
     this.validatePresenceOf("name");
     this.validatePresenceOf("group");
+    this.validateEach("stages");
 
     this.materials = stream(new MaterialSet(materials));
     this.validateWith(new NonEmptySetValidator({message: `A pipeline must have at least one material.`}), "materials");
@@ -69,7 +70,8 @@ export class PipelineConfig extends ValidatableMixin {
     return {
       group: this.group(),
       pipeline: {
-        name: this.name()
+        name: this.name(),
+        stages: _.map(this.stages(), (stage: Stage) => { return stage.toJSON(); })
       }
     };
   }

@@ -22,21 +22,21 @@ describe("PipelineConfig model", () => {
   const defaultMaterials = [new Material("git", new GitMaterialAttributes(undefined, true, "https://github.com/gocd/gocd"))];
 
   it("should include a name", () => {
-    let pip = new PipelineConfig("name", defaultMaterials);
+    let pip = new PipelineConfig("name", defaultMaterials, []);
     expect(pip.isValid()).toBe(true);
     expect(pip.errors().count()).toBe(0);
 
-    pip = new PipelineConfig("", defaultMaterials);
+    pip = new PipelineConfig("", defaultMaterials, []);
     expect(pip.isValid()).toBe(false);
     expect(pip.errors().count()).toBe(1);
   });
 
   it("should include a material", () => {
-    let pip = new PipelineConfig("name", defaultMaterials);
+    let pip = new PipelineConfig("name", defaultMaterials, []);
     expect(pip.isValid()).toBe(true);
     expect(pip.errors().count()).toBe(0);
 
-    pip = new PipelineConfig("name", []);
+    pip = new PipelineConfig("name", [], []);
     expect(pip.isValid()).toBe(false);
     expect(pip.errors().count()).toBe(1);
   });
