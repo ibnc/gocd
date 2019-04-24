@@ -24,13 +24,20 @@ export enum ApprovalType {
   manual = <any>"manual"
 }
 
+// in case we need to actually implement this later
+interface Authorization {}
+
 export class Approval extends ValidatableMixin {
   type: Stream<ApprovalType> = stream(ApprovalType.success);
+  //authorization must be present for server side validations
+  //even though it's not editable from the create pipeline page
+  authorization: Stream<Authorization> = stream({});
 
   constructor() {
     super();
     ValidatableMixin.call(this);
     this.validatePresenceOf("type");
+    this.validatePresenceOf("authorization");
   }
 
   isSuccessType() {
