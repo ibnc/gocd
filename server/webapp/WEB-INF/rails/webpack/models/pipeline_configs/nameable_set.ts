@@ -63,7 +63,7 @@ export class NameableSet<T extends Nameable> extends ValidatableMixin implements
     this.clearErrors(key);
     this.forEach((item: T) => {
       if (!item.isValid()) {
-        this.errors().add(item.name(), `Material named \`${item.name()}\` is invalid`);
+        this.errors().add(item.name(), `${item.modelType()} named \`${item.name()}\` is invalid`);
       }
     }, this);
     return this.errors();
