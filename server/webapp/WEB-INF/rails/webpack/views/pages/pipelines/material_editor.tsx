@@ -46,7 +46,7 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
       {id: "svn", text: "Subversion"},
       {id: "p4", text: "Perforce"},
       {id: "tfs", text: "Team Foundation Server"},
-      {id: "pipeline", text: "Pipeline"},
+      {id: "dependency", text: "Pipeline"},
       {id: "package", text: "Package Repository"},
     ];
   }
