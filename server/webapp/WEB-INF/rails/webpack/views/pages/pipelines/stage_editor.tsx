@@ -16,10 +16,10 @@
 
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
-import {Form, FormBody} from "views/components/forms/form";
-import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
-import {TextField} from "views/components/forms/input_fields";
 import {Stage} from "models/pipeline_configs/stage";
+import {Form, FormBody} from "views/components/forms/form";
+import {TextField} from "views/components/forms/input_fields";
+import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 
 interface Attrs {
   stage: Stage;

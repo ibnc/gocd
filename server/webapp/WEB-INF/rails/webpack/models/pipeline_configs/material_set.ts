@@ -46,6 +46,14 @@ export class MaterialSet extends ValidatableMixin implements Set<Material> {
     }
   }
 
+  toJSON(): any {
+    const r: any[] = [];
+    this.forEach((m: Material) => {
+      r.push(m.toPayload());
+    });
+    return r;
+  }
+
   validate(key?: string) {
     this.clearErrors(key);
     this.forEach((material: Material) => {

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-const _ = require('lodash');
-
 import {ApiRequestBuilder, ApiVersion} from "helpers/api_request_builder";
+import JsonUtils from "helpers/json_utils";
 import SparkRoutes from "helpers/spark_routes";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
@@ -58,7 +57,7 @@ export class PipelineConfig extends ValidatableMixin {
 
   create() {
     return ApiRequestBuilder.POST(SparkRoutes.pipelineConfigCreatePath(), ApiVersion.v6, {
-      payload: this.toJSON()
+      payload: this.toApiPayload()
     });
   }
 
@@ -66,13 +65,10 @@ export class PipelineConfig extends ValidatableMixin {
     return ApiRequestBuilder.POST(SparkRoutes.pipelinePausePath(this.name()), ApiVersion.v1);
   }
 
-  toJSON() {
-    return {
-      group: this.group(),
-      pipeline: {
-        name: this.name(),
-        stages: _.map(this.stages(), (stage: Stage) => { return stage.toJSON(); })
-      }
-    };
+  toApiPayload(): any {
+    const raw = JsonUtils.toSnakeCasedObject(this);
+    const group = raw.group;
+    delete raw.group;
+    return { group, pipeline: raw };
   }
 }
