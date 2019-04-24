@@ -110,7 +110,7 @@ abstract class ScmFields extends MithrilViewComponent<Attrs> {
 class GitFields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as GitMaterialAttributes;
-    return [<TextField label="Repository URL" property={mat.url} required={true}/>];
+    return [<TextField label="Repository URL" property={mat.url} errorText={errorsFor(attrs, "url")} required={true}/>];
   }
 
   extraFields(attrs: MaterialAttributes): m.Children {
@@ -122,7 +122,7 @@ class GitFields extends ScmFields {
 class HgFields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as HgMaterialAttributes;
-    return [<TextField label="Repository URL" property={mat.url} required={true}/>];
+    return [<TextField label="Repository URL" property={mat.url} errorText={errorsFor(attrs, "url")} required={true}/>];
   }
 
   extraFields(attrs: MaterialAttributes): m.Children {
@@ -133,7 +133,7 @@ class HgFields extends ScmFields {
 class SvnFields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as SvnMaterialAttributes;
-    return [<TextField label="Repository URL" property={mat.url} required={true}/>];
+    return [<TextField label="Repository URL" property={mat.url} errorText={errorsFor(attrs, "url")} required={true}/>];
   }
 
   extraFields(attrs: MaterialAttributes): m.Children {
@@ -150,8 +150,8 @@ class P4Fields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as P4MaterialAttributes;
     return [
-      <TextField label="P4 [Protocol:][Host:]Port" property={mat.port} required={true}/>,
-      <TextField label="P4 View" property={mat.view} required={true}/>,
+      <TextField label="P4 [Protocol:][Host:]Port" property={mat.port} errorText={errorsFor(attrs, "port")} required={true}/>,
+      <TextField label="P4 View" property={mat.view} errorText={errorsFor(attrs, "view")} required={true}/>,
     ];
   }
 
@@ -169,10 +169,10 @@ class TfsFields extends ScmFields {
   requiredFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as TfsMaterialAttributes;
     return [
-      <TextField label="Repository URL" property={mat.url} required={true}/>,
-      <TextField label="Project Path" property={mat.projectPath} required={true}/>,
-      <TextField label="Username" property={mat.username} required={true}/>,
-      <PasswordField label="Password" property={mat.password} required={true}/>,
+      <TextField label="Repository URL" property={mat.url} errorText={errorsFor(attrs, "url")} required={true}/>,
+      <TextField label="Project Path" property={mat.projectPath} errorText={errorsFor(attrs, "projectPath")} required={true}/>,
+      <TextField label="Username" property={mat.username} errorText={errorsFor(attrs, "username")} required={true}/>,
+      <PasswordField label="Password" property={mat.password} errorText={errorsFor(attrs, "password")} required={true}/>,
     ];
   }
 
@@ -180,4 +180,8 @@ class TfsFields extends ScmFields {
     const mat = attrs as TfsMaterialAttributes;
     return [<TextField label="Domain" property={mat.domain}/>];
   }
+}
+
+function errorsFor(attrs: MaterialAttributes, key: string): string {
+  return attrs.errors().errorsForDisplay(key);
 }
