@@ -20,10 +20,11 @@ import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
 
 export class Stage extends ValidatableMixin {
-  name: Stream<string> = stream();
-//   jobs: Stream<Job[]>;
-  constructor() {
+  name: Stream<string>;
+
+  constructor(name?: string) {
     super();
+    this.name = stream(name);
     ValidatableMixin.call(this);
     this.validatePresenceOf("name");
   }
