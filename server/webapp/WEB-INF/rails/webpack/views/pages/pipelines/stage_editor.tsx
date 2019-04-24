@@ -20,6 +20,8 @@ import {Approval, ApprovalType, Stage} from "models/pipeline_configs/stage";
 import {Form, FormBody} from "views/components/forms/form";
 import {TextField} from "views/components/forms/input_fields";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
+import {TooltipSize} from "views/components/tooltip";
+import * as Tooltip from "views/components/tooltip";
 import * as css from "./components.scss";
 
 interface Attrs {
@@ -39,6 +41,8 @@ export class StageEditor extends MithrilViewComponent<Attrs> {
             <label className="inline">Automatically</label>
             <input type="radio" class={css.approvalTypeSelector} checked={!stage.approval().isSuccessType()} value="manual" onclick={this.changeApprovalType.bind(this, ApprovalType.manual, stage.approval())} />
             <label className="inline">Manually</label>
+            <Tooltip.Help size={TooltipSize.medium}
+                          content={"Automatically or Manually trigger your stage to run after preceding stage completes"} />
           </div>
         </AdvancedSettings>
       </Form>
