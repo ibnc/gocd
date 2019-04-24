@@ -16,7 +16,8 @@
 
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
-import {Stage} from "models/pipeline_configs/stage";
+import * as css from "./components.scss";
+import {Stage, Approval, ApprovalType} from "models/pipeline_configs/stage";
 import {Form, FormBody} from "views/components/forms/form";
 import {TextField} from "views/components/forms/input_fields";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
@@ -27,14 +28,25 @@ interface Attrs {
 
 export class StageEditor extends MithrilViewComponent<Attrs> {
   view(vnode: m.Vnode<Attrs>) {
+    const stage = vnode.attrs.stage;
     return <FormBody>
       <Form last={true} compactForm={true}>
-        <TextField label="Stage Name" placeholder="e.g., Test-and-Report" required={true} property={vnode.attrs.stage.name} errorText={vnode.attrs.stage.errors().errorsForDisplay("name")}/>
+        <TextField label="Stage Name" placeholder="e.g., Test-and-Report" required={true} property={stage.name} errorText={stage.errors().errorsForDisplay("name")}/>
         <AdvancedSettings>
-        More to come...
+          <div class={css.approvalTypeSelectors}>
+            <label className="inline">This stage runs:</label>
+            <input type="radio" class={css.approvalTypeSelector} checked={stage.approval().isSuccessType()} value="success" onclick={this.changeApprovalType.bind(this, ApprovalType.success, stage.approval())} />
+            <label className="inline">Automatically</label>
+            <input type="radio" class={css.approvalTypeSelector} checked={!stage.approval().isSuccessType()} value="manual" onclick={this.changeApprovalType.bind(this, ApprovalType.manual, stage.approval())} />
+            <label className="inline">Manually</label>
+          </div>
         </AdvancedSettings>
       </Form>
     </FormBody>;
+  }
 
+  changeApprovalType(type: ApprovalType, approval: Approval, event: Event) {
+    event.stopPropagation();
+    approval.type(type);
   }
 }

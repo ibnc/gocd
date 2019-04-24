@@ -19,8 +19,28 @@ import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
 
+export enum ApprovalType {
+  success = <any>"success",
+  manual = <any>"manual"
+}
+
+export class Approval extends ValidatableMixin {
+  type: Stream<ApprovalType> = stream(ApprovalType.success);
+
+  constructor() {
+    super();
+    ValidatableMixin.call(this);
+    this.validatePresenceOf("type");
+  }
+
+  isSuccessType() {
+    return this.type() === ApprovalType.success;
+  }
+}
+
 export class Stage extends ValidatableMixin {
   name: Stream<string>;
+  approval: Stream<Approval> = stream(new Approval());
 
   constructor(name?: string) {
     super();
