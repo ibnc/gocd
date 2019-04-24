@@ -90,6 +90,6 @@ describe("Materials: TestConnection", () => {
   }
 
   function payload(material: Material): string {
-    return JSON.stringify(material.toPayload());
+    return JSON.stringify(material.toApiPayload());
   }
 });

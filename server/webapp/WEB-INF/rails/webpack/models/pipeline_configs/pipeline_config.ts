@@ -21,38 +21,30 @@ import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {Material} from "models/materials/types";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
-import {MaterialSet, NonEmptySetValidator} from "./material_set";
+import {NameableSet, NonEmptySetValidator} from "./material_set";
 import {Stage} from "./stage";
-
-/* Move these to another file? */
-// interface Job extends ValidatableMixin {
-//   name: Stream<string>;
-//   tasks: Stream<Task[]>;
-// }
-
-// interface Task extends ValidatableMixin {
-//   type: Stream<string>;
-// }
 
 export class PipelineConfig extends ValidatableMixin {
   group: Stream<string> = stream("defaultGroup");
   name: Stream<string>;
-  materials: Stream<MaterialSet>;
-  stages: Stream<Stage[]>;
+  materials: Stream<NameableSet<Material>>;
+  stages: Stream<NameableSet<Stage>>;
 
   constructor(name: string, materials: Material[], stages: Stage[]) {
     super();
 
     ValidatableMixin.call(this);
     this.name = stream(name);
-    this.stages = stream(stages);
     this.validatePresenceOf("name");
     this.validatePresenceOf("group");
-    this.validateEach("stages");
 
-    this.materials = stream(new MaterialSet(materials));
+    this.materials = stream(new NameableSet(materials));
     this.validateWith(new NonEmptySetValidator({message: `A pipeline must have at least one material.`}), "materials");
     this.validateAssociated("materials");
+
+    this.stages = stream(new NameableSet(stages));
+    this.validateWith(new NonEmptySetValidator({message: `A pipeline must have at least one stage.`}), "stages");
+    this.validateAssociated("stages");
   }
 
   create() {
@@ -70,5 +62,9 @@ export class PipelineConfig extends ValidatableMixin {
     const group = raw.group;
     delete raw.group;
     return { group, pipeline: raw };
+  }
+
+  modelType(): string {
+    return "PipelineConfig";
   }
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import {Material} from "models/materials/types";
 import {ValidatableMixin, Validator} from "models/mixins/new_validatable_mixin";
 
 export class NonEmptySetValidator<T> extends Validator {
@@ -27,44 +26,50 @@ export class NonEmptySetValidator<T> extends Validator {
   }
 }
 
-// Specialized Set<Material> implementation where member equality is based on only the `name`
+export interface Nameable extends ValidatableMixin {
+  name: () => string;
+  modelType: () => string;
+  toApiPayload: () => any;
+}
+
+// Specialized Set<T> implementation where member equality is based on only the `name`
 // of the material, and NOT the identity or the structure.
-export class MaterialSet extends ValidatableMixin implements Set<Material> {
+export class NameableSet<T extends Nameable> extends ValidatableMixin implements Set<T> {
 
   get size(): number {
     return this._members.size;
   }
 
-  [Symbol.toStringTag]: string = "MaterialSet";
-  private _members: Map<string, Material> = new Map(); // preserves insertion order
+  [Symbol.toStringTag]: string = `NameableSet`;
+  private _members: Map<string, T> = new Map(); // preserves insertion order
 
-  constructor(materials: Material[]) {
+  constructor(items: T[]) {
     super();
 
-    for (let i = 0, len = materials.length; i < len; i++) {
-      this.add(materials[i]);
+    for (let i = 0, len = items.length; i < len; i++) {
+      this.add(items[i]);
     }
   }
 
   toJSON(): any {
     const r: any[] = [];
-    this.forEach((m: Material) => {
-      r.push(m.toPayload());
+    this.forEach((m: T) => {
+      r.push(m.toApiPayload());
     });
     return r;
   }
 
   validate(key?: string) {
     this.clearErrors(key);
-    this.forEach((material: Material) => {
-      if (!material.isValid()) {
-        this.errors().add(material.name(), `Material named \`${material.name()}\` is invalid`);
+    this.forEach((item: T) => {
+      if (!item.isValid()) {
+        this.errors().add(item.name(), `Material named \`${item.name()}\` is invalid`);
       }
     }, this);
     return this.errors();
   }
 
-  add(value: Material): this {
+  add(value: T): this {
     this._members.set(value.name(), value);
     return this;
   }
@@ -73,14 +78,14 @@ export class MaterialSet extends ValidatableMixin implements Set<Material> {
     this._members.clear();
   }
 
-  delete(value: Material): boolean {
+  delete(value: T): boolean {
     return this._members.delete(value.name());
   }
 
-  forEach(callbackfn: (value: Material, value2: Material, set: Set<Material>) => void, thisArg?: any) {
+  forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any) {
     const thisProvided = arguments.length > 1;
 
-    this._members.forEach((val: Material, name: string, _: Map<string, Material>) => {
+    this._members.forEach((val: T, name: string, _: Map<string, T>) => {
       if (thisProvided) {
         callbackfn.apply(thisArg, [val, val, this]);
       } else {
@@ -89,23 +94,23 @@ export class MaterialSet extends ValidatableMixin implements Set<Material> {
     });
   }
 
-  has(value: Material): boolean {
+  has(value: T): boolean {
     return this._members.has(value.name());
   }
 
-  [Symbol.iterator](): IterableIterator<Material> {
+  [Symbol.iterator](): IterableIterator<T> {
     return this._members.values();
   }
 
-  entries(): IterableIterator<[Material, Material]> {
-    return new Set<Material>(this._members.values()).entries();
+  entries(): IterableIterator<[T, T]> {
+    return new Set<T>(this._members.values()).entries();
   }
 
-  keys(): IterableIterator<Material> {
+  keys(): IterableIterator<T> {
     return this[Symbol.iterator]();
   }
 
-  values(): IterableIterator<Material> {
+  values(): IterableIterator<T> {
     return this[Symbol.iterator]();
   }
 }

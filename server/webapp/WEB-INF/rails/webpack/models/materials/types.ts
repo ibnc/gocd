@@ -87,6 +87,10 @@ export class Material implements ValidatableMixin {
     return this.attributes().name() || "";
   }
 
+  modelType(): string {
+    return "Material";
+  }
+
   typeProxy(value?: any): string {
     if (arguments.length > 0) {
       const newType = value;
@@ -106,7 +110,7 @@ export class Material implements ValidatableMixin {
     return this.type() === "p4" ? this.attributes().port() : this.attributes().url();
   }
 
-  toPayload() {
+  toApiPayload() {
     return JsonUtils.toSnakeCasedObject(this);
   }
 
@@ -114,7 +118,7 @@ export class Material implements ValidatableMixin {
     return ApiRequestBuilder.POST(
       SparkRoutes.materialConnectionCheck(),
       Material.API_VERSION_HEADER,
-      {payload: this.toPayload()}
+      {payload: this.toApiPayload()}
     );
   }
 }

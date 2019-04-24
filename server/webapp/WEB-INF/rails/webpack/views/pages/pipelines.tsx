@@ -36,7 +36,8 @@ const jobImg      = require("../../../app/assets/images/concept_diagrams/concept
 
 export class PipelineCreatePage extends Page {
   private material: Material = new Material("git", new GitMaterialAttributes());
-  private model: PipelineConfig = new PipelineConfig("", [this.material], [new Stage()]);
+  private stage: Stage = new Stage();
+  private model: PipelineConfig = new PipelineConfig("", [this.material], [this.stage]);
 
   pageName(): string {
     return "Add a New Pipeline";
@@ -74,7 +75,7 @@ export class PipelineCreatePage extends Page {
 
       <FillableSection sectionId="stage">
         <UserInputPane heading="Part 3: Stage Details">
-          <StageEditor stage={this.model.stages()[0]} />
+          <StageEditor stage={this.stage} />
         </UserInputPane>
         <ConceptDiagram image={stageImg}>
           A <strong>stage</strong> is a group of jobs, and a <strong>job</strong> is a

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import JsonUtils from "helpers/json_utils";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
@@ -27,9 +28,11 @@ export class Stage extends ValidatableMixin {
     this.validatePresenceOf("name");
   }
 
-  toJSON() {
-    return {
-      name: this.name()
-    };
+  toApiPayload() {
+    return JsonUtils.toSnakeCasedObject(this);
+  }
+
+  modelType(): string {
+    return "StageConfig";
   }
 }
