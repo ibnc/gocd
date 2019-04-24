@@ -18,6 +18,8 @@ import JsonUtils from "helpers/json_utils";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
+import {Job} from "./job";
+import {NameableSet, NonEmptySetValidator} from "./nameable_set";
 
 export enum ApprovalType {
   success = <any>"success",
@@ -48,12 +50,16 @@ export class Approval extends ValidatableMixin {
 export class Stage extends ValidatableMixin {
   name: Stream<string>;
   approval: Stream<Approval> = stream(new Approval());
+  jobs: Stream<NameableSet<Job>>;
 
-  constructor(name?: string) {
+  constructor(name: string, jobs: Job[]) {
     super();
     this.name = stream(name);
     ValidatableMixin.call(this);
     this.validatePresenceOf("name");
+    this.jobs = stream(new NameableSet(jobs));
+    this.validateWith(new NonEmptySetValidator({message: `A stage must have at least one job.`}), "jobs");
+    this.validateAssociated("jobs");
   }
 
   toApiPayload() {

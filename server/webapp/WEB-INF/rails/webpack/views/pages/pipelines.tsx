@@ -16,6 +16,7 @@
 
 import * as m from "mithril";
 import {GitMaterialAttributes, Material} from "models/materials/types";
+import {Job} from "models/pipeline_configs/job";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import {Stage} from "models/pipeline_configs/stage";
 import * as s from "underscore.string";
@@ -24,6 +25,7 @@ import {PipelineActions} from "views/pages/pipelines/actions";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {ConceptDiagram} from "views/pages/pipelines/concept_diagram";
 import {FillableSection} from "views/pages/pipelines/fillable_section";
+import {JobEditor} from "views/pages/pipelines/job_editor";
 import {MaterialEditor} from "views/pages/pipelines/material_editor";
 import {PipelineInfoEditor} from "views/pages/pipelines/pipeline_info_editor";
 import {StageEditor} from "views/pages/pipelines/stage_editor";
@@ -36,7 +38,8 @@ const jobImg      = require("../../../app/assets/images/concept_diagrams/concept
 
 export class PipelineCreatePage extends Page {
   private material: Material = new Material("git", new GitMaterialAttributes());
-  private stage: Stage = new Stage();
+  private job: Job = new Job("");
+  private stage: Stage = new Stage("", [this.job]);
   private model: PipelineConfig = new PipelineConfig("", [this.material], [this.stage]);
 
   pageName(): string {
@@ -85,7 +88,7 @@ export class PipelineCreatePage extends Page {
 
       <FillableSection sectionId="job">
         <UserInputPane heading="Part 4: Job and Tasks">
-          <p>Form fields go here</p>
+          <JobEditor job={this.job}/>
           <AdvancedSettings>
             More to come...
           </AdvancedSettings>
