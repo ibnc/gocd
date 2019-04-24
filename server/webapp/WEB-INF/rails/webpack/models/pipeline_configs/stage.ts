@@ -22,18 +22,15 @@ import {Job} from "./job";
 import {NameableSet, NonEmptySetValidator} from "./nameable_set";
 
 export enum ApprovalType {
-  success = <any>"success",
-  manual = <any>"manual"
+  success = "success",
+    manual = "manual"
 }
-
-// in case we need to actually implement this later
-interface Authorization {}
 
 export class Approval extends ValidatableMixin {
   type: Stream<ApprovalType> = stream(ApprovalType.success);
   //authorization must be present for server side validations
   //even though it's not editable from the create pipeline page
-  authorization: Stream<Authorization> = stream({});
+  authorization: Stream<object> = stream({});
 
   constructor() {
     super();
