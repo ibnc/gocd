@@ -21,12 +21,10 @@ import * as styles from "./components.scss";
 
 const cls = bind(styles);
 
-
 export class TaskEditor extends MithrilViewComponent {
   view(vnode: m.Vnode) {
     return <code className={cls(styles.execEditor)}>
       <pre contenteditable={true} className={cls(styles.currentEditor)}></pre>
-    </code>
+    </code>;
   }
 }
-
