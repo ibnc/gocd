@@ -15,15 +15,25 @@
  */
 
 import {Job} from "models/pipeline_configs/job";
+import {ExecTask} from "models/pipeline_configs/task";
 
 describe("Job model", () => {
+  function validJob() {
+    return new Job("name", [new ExecTask()]);
+  }
+
   it("should include a name", () => {
-    let job = new Job("name");
+    let job = validJob();
     expect(job.isValid()).toBe(true);
     expect(job.errors().count()).toBe(0);
 
-    job = new Job("");
+    job = new Job("", [new ExecTask()]);
     expect(job.isValid()).toBe(false);
     expect(job.errors().count()).toBe(1);
+  });
+
+  it("should serialize correctly", () => {
+    const job = validJob();
+    expect(job.toApiPayload()).toEqual({ name: 'name', tasks: [{ type: "exec"}]});
   });
 });

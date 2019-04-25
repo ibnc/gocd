@@ -15,24 +15,20 @@
  */
 
 import JsonUtils from "helpers/json_utils";
-import {Stream} from "mithril/stream";
-import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
-import {Task} from "models/pipeline_configs/task";
 
-export class Job extends ValidatableMixin {
-  name: Stream<string>;
-  tasks: Stream<Task[]>;
+type ValidTypes = "exec" | "fetchArtifact";
+export interface Task extends ValidatableMixin {
+  type: ValidTypes;
+  toApiPayload: () => any;
+}
 
-  constructor(name: string, tasks: Task[]) {
+export class ExecTask extends ValidatableMixin implements Task {
+  type: ValidTypes =  "exec";
+
+  constructor() {
     super();
-
     ValidatableMixin.call(this);
-    this.name = stream(name);
-    this.tasks = stream(tasks);
-    this.validatePresenceOf("name");
-    this.validatePresenceOf("tasks");
-    this.validateEach("tasks");
   }
 
   toApiPayload() {
@@ -40,6 +36,6 @@ export class Job extends ValidatableMixin {
   }
 
   modelType() {
-    return "Job";
+    return "Task";
   }
 }

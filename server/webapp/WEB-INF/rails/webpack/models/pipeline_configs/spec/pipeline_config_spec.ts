@@ -18,10 +18,11 @@ import {GitMaterialAttributes, Material} from "models/materials/types";
 import {Job} from "models/pipeline_configs/job";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import {Stage} from "models/pipeline_configs/stage";
+import {ExecTask} from "models/pipeline_configs/task";
 
 describe("PipelineConfig model", () => {
   const defaultMaterials = [new Material("git", new GitMaterialAttributes(undefined, true, "https://github.com/gocd/gocd"))];
-  const defaultStages = [new Stage("stage1", [new Job("job1")])];
+  const defaultStages = [new Stage("stage1", [new Job("job1", [new ExecTask()])])];
 
   it("should include a name", () => {
     let pip = new PipelineConfig("name", defaultMaterials, defaultStages);
