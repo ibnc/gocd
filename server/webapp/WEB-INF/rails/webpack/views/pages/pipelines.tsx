@@ -29,6 +29,7 @@ import {JobEditor} from "views/pages/pipelines/job_editor";
 import {MaterialEditor} from "views/pages/pipelines/material_editor";
 import {PipelineInfoEditor} from "views/pages/pipelines/pipeline_info_editor";
 import {StageEditor} from "views/pages/pipelines/stage_editor";
+import {TaskEditor} from "views/pages/pipelines/task_editor";
 import {UserInputPane} from "views/pages/pipelines/user_input_pane";
 
 const materialImg = require("../../../app/assets/images/concept_diagrams/concept_material.svg");
@@ -89,6 +90,7 @@ export class PipelineCreatePage extends Page {
       <FillableSection sectionId="job">
         <UserInputPane heading="Part 4: Job and Tasks">
           <JobEditor job={this.job}/>
+          <TaskEditor />
           <AdvancedSettings>
             More to come...
           </AdvancedSettings>
