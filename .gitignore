@@ -379,3 +379,7 @@ api/api-config-repos-v2/out/
 api/api-config-repos-v2/target/
 api/api-config-repos-v2/logs/
 api/api-config-repos-v2/config/
+api/api-dependency-material-autocomplete-v1/out/
+api/api-dependency-material-autocomplete-v1/target/
+api/api-dependency-material-autocomplete-v1/logs/
+
