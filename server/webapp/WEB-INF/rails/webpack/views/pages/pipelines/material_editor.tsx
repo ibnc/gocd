@@ -16,7 +16,7 @@
 
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
-import {GitMaterialAttributes, HgMaterialAttributes, Material, MaterialAttributes, P4MaterialAttributes, SvnMaterialAttributes, TfsMaterialAttributes} from "models/materials/types";
+import {DependencyMaterialAttributes, GitMaterialAttributes, HgMaterialAttributes, Material, MaterialAttributes, P4MaterialAttributes, SvnMaterialAttributes, TfsMaterialAttributes} from "models/materials/types";
 import {Form, FormBody} from "views/components/forms/form";
 import {CheckboxField, Option, PasswordField, SelectField, SelectFieldOptions, TextField} from "views/components/forms/input_fields";
 import {TestConnection} from "views/components/materials/test_connection";
@@ -46,8 +46,8 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
       {id: "svn", text: "Subversion"},
       {id: "p4", text: "Perforce"},
       {id: "tfs", text: "Team Foundation Server"},
-      {id: "dependency", text: "Pipeline"},
-      {id: "package", text: "Package Repository"},
+      {id: "dependency", text: "Another Pipeline"},
+      // {id: "package", text: "Package Repository"},
     ];
   }
 
@@ -82,6 +82,12 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
           material.attributes(new TfsMaterialAttributes());
         }
         return <TfsFields material={material}/>;
+        break;
+      case "dependency":
+        if (!(material.attributes() instanceof DependencyMaterialAttributes)) {
+          material.attributes(new DependencyMaterialAttributes());
+        }
+        return <DependencyFields material={material}/>;
         break;
       default:
         break;
@@ -179,6 +185,19 @@ class TfsFields extends ScmFields {
   extraFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as TfsMaterialAttributes;
     return [<TextField label="Domain" property={mat.domain}/>];
+  }
+}
+
+class DependencyFields extends MithrilViewComponent<Attrs> {
+  view(vnode: m.Vnode<Attrs>): m.Children {
+    const mat = vnode.attrs.material.attributes() as DependencyMaterialAttributes;
+    return [
+      <TextField label="Upstream Pipeline" property={mat.pipeline} errorText={errorsFor(mat, "pipeline")} required={true} />,
+      <TextField label="Upstream Stage" property={mat.stage} errorText={errorsFor(mat, "stage")} required={true} />,
+      <AdvancedSettings>
+        <TextField label="Material Name" placeholder="A human-friendly label for this material" property={mat.name}/>
+      </AdvancedSettings>
+    ];
   }
 }
 

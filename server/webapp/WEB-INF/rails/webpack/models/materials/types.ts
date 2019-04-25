@@ -21,6 +21,7 @@ import * as _ from "lodash";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {
+  DependencyMaterialAttributesJSON,
   GitMaterialAttributesJSON,
   HgMaterialAttributesJSON,
   MaterialAttributesJSON,
@@ -62,6 +63,10 @@ export interface P4MaterialAttributes extends ValidatableMixin {
 
 //tslint:disable-next-line
 export interface TfsMaterialAttributes extends ValidatableMixin {
+}
+
+//tslint:disable-next-line
+export interface DependencyMaterialAttributes extends ValidatableMixin {
 }
 
 export class Materials {
@@ -156,6 +161,8 @@ export abstract class MaterialAttributes implements ValidatableMixin {
         return P4MaterialAttributes.fromJSON(material.attributes as P4MaterialAttributesJSON);
       case "tfs":
         return TfsMaterialAttributes.fromJSON(material.attributes as TfsMaterialAttributesJSON);
+      case "dependency":
+        return DependencyMaterialAttributes.fromJSON(material.attributes as DependencyMaterialAttributesJSON);
       default:
         throw new Error(`Unknown material type ${material.type}`);
     }
@@ -394,3 +401,30 @@ export class TfsMaterialAttributes extends MaterialAttributes {
 }
 
 applyMixins(TfsMaterialAttributes, ValidatableMixin);
+
+export class DependencyMaterialAttributes extends MaterialAttributes {
+  pipeline: Stream<string>;
+  stage: Stream<string>;
+
+  constructor(name?: string, autoUpdate?: boolean, pipeline?: string, stage?: string) {
+    super(name, autoUpdate);
+    this.pipeline = stream(pipeline);
+    this.stage = stream(stage);
+
+    this.validatePresenceOf("pipeline");
+    this.validatePresenceOf("stage");
+  }
+
+  static fromJSON(json: DependencyMaterialAttributesJSON) {
+    const attrs = new DependencyMaterialAttributes(
+      json.name,
+      json.auto_update,
+      json.pipeline,
+      json.stage,
+    );
+    attrs.errors(new Errors(json.errors));
+    return attrs;
+  }
+}
+
+applyMixins(DependencyMaterialAttributes, ValidatableMixin);

@@ -19,9 +19,9 @@ import * as m from "mithril";
 import {Approval, ApprovalType, Stage} from "models/pipeline_configs/stage";
 import {Form, FormBody} from "views/components/forms/form";
 import {TextField} from "views/components/forms/input_fields";
-import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import {TooltipSize} from "views/components/tooltip";
 import * as Tooltip from "views/components/tooltip";
+import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
 import * as css from "./components.scss";
 
 interface Attrs {
