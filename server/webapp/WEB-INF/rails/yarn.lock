@@ -122,6 +122,13 @@
   dependencies:
     "@types/sizzle" "*"
 
+"@types/jqueryui@^1.12.7":
+  version "1.12.7"
+  resolved "https://registry.yarnpkg.com/@types/jqueryui/-/jqueryui-1.12.7.tgz#81546a73d5460a27d972008a8bd1d73b0e275a48"
+  integrity sha512-MpHuknhR20kBNsDA2VAM6WZGc+CMApzfKfTZuzMOH2dEUzo5POPGicfGJ647wvl2T6ZgQKPCSWmCUhna3XpX0Q==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/lodash@^4.14.119":
   version "4.14.119"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.119.tgz#be847e5f4bc3e35e46d041c394ead8b603ad8b39"
@@ -5040,6 +5047,11 @@ jquery-textcomplete@0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/jquery-textcomplete/-/jquery-textcomplete-0.8.2.tgz#6667cb30aa8f847406df1182924c53de354cde0c"
   integrity sha1-ZmfLMKqPhHQG3xGCkkxT3jVM3gw=
+
+jquery-ui@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
+  integrity sha1-vLQEXI3QU5wTS8FIjN0+dop6nlE=
 
 jquery@^2.2.0:
   version "2.2.4"

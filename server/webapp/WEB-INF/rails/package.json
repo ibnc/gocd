@@ -29,6 +29,7 @@
     "font-awesome": "^4.7.0",
     "foundation-sites": "^6.2.3",
     "jquery": "^2.2.0",
+    "jquery-ui": "^1.12.1",
     "jquery-textcomplete": "0.8.2",
     "lodash": "^4.2.1",
     "lodash-inflection": "^1.5.0",
@@ -42,6 +43,7 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "@types/jqueryui": "^1.12.7",
     "@types/jasmine": "^2.8.11",
     "@types/jasmine-ajax": "^3.1.39",
     "@types/jasmine-jquery": "^1.5.33",

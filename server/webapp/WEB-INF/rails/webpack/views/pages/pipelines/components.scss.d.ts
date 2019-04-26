@@ -12,6 +12,8 @@ export const sectionNote: string;
 export const attention: string;
 export const userInput: string;
 export const conceptDiagram: string;
+export const autocompletePane: string;
+export const autocompleteItem: string;
 export const advancedSettings: string;
 export const approvalTypeSelectors: string;
 export const approvalTypeSelector: string;
