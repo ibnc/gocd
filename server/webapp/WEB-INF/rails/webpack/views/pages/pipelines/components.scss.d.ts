@@ -5,6 +5,8 @@ export const currentEditor: string;
 export const cmd: string;
 export const task: string;
 export const args: string;
+export const awesomplete: string;
+export const visuallyHidden: string;
 export const fillable: string;
 export const actions: string;
 export const sectionHeading: string;
