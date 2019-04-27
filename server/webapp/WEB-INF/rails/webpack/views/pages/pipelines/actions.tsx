@@ -16,8 +16,8 @@ export class PipelineActions extends MithrilViewComponent<Attrs> {
         <Buttons.Cancel onclick={this.onCancel.bind(this)} small={false}>Cancel</Buttons.Cancel>
         <div class={css.saveBtns}>
           <span class={css.errorResponse}></span>
-          <Buttons.Secondary onclick={this.onSave.bind(this, true, vnode.attrs.pipelineConfig)} small={false}>Save + Edit Configuration</Buttons.Secondary>
-          <Buttons.Primary onclick={this.onSave.bind(this, false, vnode.attrs.pipelineConfig)} small={false}>Save + Run Pipeline</Buttons.Primary>
+          <Buttons.Secondary onclick={this.onSave.bind(this, true, vnode.attrs.pipelineConfig)} small={false}>Save + Edit Full Config</Buttons.Secondary>
+          <Buttons.Primary onclick={this.onSave.bind(this, false, vnode.attrs.pipelineConfig)} small={false}>Save + Run This Pipeline</Buttons.Primary>
         </div>
       </footer>
     );
