@@ -102,7 +102,6 @@ export class PipelineCreatePage extends Page {
       </FillableSection>,
 
       <PipelineActions pipelineConfig={this.model}/>
-
     ];
   }
 

@@ -3,7 +3,7 @@ import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import * as Buttons from "views/components/buttons";
-import {FillableSection} from "views/pages/pipelines/fillable_section";
+import * as css from "./components.scss";
 
 interface Attrs {
   pipelineConfig: PipelineConfig;
@@ -11,15 +11,16 @@ interface Attrs {
 
 export class PipelineActions extends MithrilViewComponent<Attrs> {
   view(vnode: m.Vnode<Attrs>): m.Children | void | null {
-      return (
-        <FillableSection sectionId="">
-          <Buttons.Secondary onclick={this.onCancel.bind(this)} small={false}>Cancel</Buttons.Secondary>
-          <div class="save-btns">
-            <Buttons.Primary  onclick={this.onSave.bind(this, true, vnode.attrs.pipelineConfig)} small={false}>Save + Edit Configuration</Buttons.Primary>
-            <Buttons.Primary  onclick={this.onSave.bind(this, false, vnode.attrs.pipelineConfig)} small={false}>Save + Run Pipeline</Buttons.Primary>
-          </div>
-        </FillableSection>
-      );
+    return (
+      <footer class={css.actions}>
+        <Buttons.Secondary onclick={this.onCancel.bind(this)} small={false}>Cancel</Buttons.Secondary>
+        <div class={css.saveBtns}>
+          <span class={css.errorResponse}></span>
+          <Buttons.Secondary onclick={this.onSave.bind(this, true, vnode.attrs.pipelineConfig)} small={false}>Save + Edit Configuration</Buttons.Secondary>
+          <Buttons.Primary onclick={this.onSave.bind(this, false, vnode.attrs.pipelineConfig)} small={false}>Save + Run Pipeline</Buttons.Primary>
+        </div>
+      </footer>
+    );
   }
 
   onCancel(event: Event): void {
@@ -29,6 +30,8 @@ export class PipelineActions extends MithrilViewComponent<Attrs> {
 
   onSave(shouldPause: boolean, pipelineConfig: PipelineConfig, event: Event): void {
     event.stopPropagation();
+    this.clearError();
+
     if (pipelineConfig.isValid()) {
       pipelineConfig.create().then((response) => {
         response.getOrThrow();
@@ -40,10 +43,23 @@ export class PipelineActions extends MithrilViewComponent<Attrs> {
           window.location.href = "/go/pipelines";
         }
       }).catch((reason) => {
-        //TODO: add some error handling
-        //tslint:disable-next-line
-        console.log(reason);
+        this.setError(reason);
       });
     }
   }
+
+  private clearError(): Node {
+    return empty(document.querySelector(`.${css.errorResponse}`)!);
+  }
+
+  private setError(text: string) {
+    this.clearError().textContent = text;
+  }
+}
+
+function empty(el: Node) {
+  while (el.firstChild) {
+    el.removeChild(el.firstChild);
+  }
+  return el;
 }
