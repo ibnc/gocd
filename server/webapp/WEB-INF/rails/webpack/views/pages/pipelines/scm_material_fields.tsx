@@ -63,7 +63,7 @@ export class GitFields extends ScmFields {
 
   extraFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as GitMaterialAttributes;
-    return [<TextField label="Repository Branch" property={mat.branch}/>];
+    return [<TextField label="Repository Branch" property={mat.branch} placeholder="master"/>];
   }
 }
 
