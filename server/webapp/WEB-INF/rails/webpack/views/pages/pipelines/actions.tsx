@@ -13,7 +13,7 @@ export class PipelineActions extends MithrilViewComponent<Attrs> {
   view(vnode: m.Vnode<Attrs>): m.Children | void | null {
     return (
       <footer class={css.actions}>
-        <Buttons.Secondary onclick={this.onCancel.bind(this)} small={false}>Cancel</Buttons.Secondary>
+        <Buttons.Cancel onclick={this.onCancel.bind(this)} small={false}>Cancel</Buttons.Cancel>
         <div class={css.saveBtns}>
           <span class={css.errorResponse}></span>
           <Buttons.Secondary onclick={this.onSave.bind(this, true, vnode.attrs.pipelineConfig)} small={false}>Save + Edit Configuration</Buttons.Secondary>
