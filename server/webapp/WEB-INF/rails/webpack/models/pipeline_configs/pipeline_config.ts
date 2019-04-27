@@ -48,7 +48,7 @@ export class PipelineConfig extends ValidatableMixin {
   }
 
   create() {
-    return ApiRequestBuilder.POST(SparkRoutes.pipelineConfigCreatePath(), ApiVersion.v6, {
+    return ApiRequestBuilder.POST(SparkRoutes.pipelineConfigCreatePath(), ApiVersion.v7, {
       payload: this.toApiPayload()
     });
   }
