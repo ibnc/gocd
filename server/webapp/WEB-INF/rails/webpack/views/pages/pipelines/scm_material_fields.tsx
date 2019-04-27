@@ -63,7 +63,11 @@ export class GitFields extends ScmFields {
 
   extraFields(attrs: MaterialAttributes): m.Children {
     const mat = attrs as GitMaterialAttributes;
-    return [<TextField label="Repository Branch" property={mat.branch} placeholder="master"/>];
+    return [
+      <TextField label="Repository Branch" property={mat.branch} placeholder="master"/>,
+      <TextField label="Username" property={mat.username}/>,
+      <PasswordField label="Password" property={mat.password}/>,
+    ];
   }
 }
 
@@ -74,7 +78,11 @@ export class HgFields extends ScmFields {
   }
 
   extraFields(attrs: MaterialAttributes): m.Children {
-    return [];
+    const mat = attrs as HgMaterialAttributes;
+    return [
+      <TextField label="Username" property={mat.username}/>,
+      <PasswordField label="Password" property={mat.password}/>,
+    ];
   }
 }
 
