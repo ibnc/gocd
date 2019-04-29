@@ -21,7 +21,7 @@ import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {Material} from "models/materials/types";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
-import {NameableSet, NonEmptySetValidator} from "./nameable_set";
+import {NameableSet, NonEmptyCollectionValidator} from "./nameable_set";
 import {Stage} from "./stage";
 
 export class PipelineConfig extends ValidatableMixin {
@@ -39,11 +39,11 @@ export class PipelineConfig extends ValidatableMixin {
     this.validatePresenceOf("group");
 
     this.materials = stream(new NameableSet(materials));
-    this.validateWith(new NonEmptySetValidator({message: `A pipeline must have at least one material.`}), "materials");
+    this.validateWith(new NonEmptyCollectionValidator({message: `A pipeline must have at least one material.`}), "materials");
     this.validateAssociated("materials");
 
     this.stages = stream(new NameableSet(stages));
-    this.validateWith(new NonEmptySetValidator({message: `A pipeline must have at least one stage.`}), "stages");
+    this.validateWith(new NonEmptyCollectionValidator({message: `A pipeline must have at least one stage.`}), "stages");
     this.validateAssociated("stages");
   }
 

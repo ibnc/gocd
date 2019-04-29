@@ -19,7 +19,7 @@ import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
-import {DependencyMaterialAutocomplete} from "models/materials/dependency_autocomplete_cache";
+import {DependencyMaterialAutocomplete, PipelineNameCache} from "models/materials/dependency_autocomplete_cache";
 import {DependencyMaterialAttributes, Material, MaterialAttributes} from "models/materials/types";
 import {AutocompleteField, SuggestionProvider, SuggestionWriter} from "views/components/autocomplete/fields";
 import {Option, SelectField, SelectFieldOptions, TextField} from "views/components/forms/input_fields";
@@ -28,19 +28,22 @@ import * as css from "./components.scss";
 
 interface Attrs {
   material: Material;
-  cache: AutocompleteCache;
+  cache: SuggestionCache;
 }
 
-export class AutocompleteCache extends DependencyMaterialAutocomplete<Awesomplete.Suggestion, Option> {
+//tslint:disable-next-line
+export interface SuggestionCache extends PipelineNameCache<Awesomplete.Suggestion, Option> {}
+
+export class DefaultCache extends DependencyMaterialAutocomplete<Awesomplete.Suggestion, Option> implements SuggestionCache {
   constructor() {
     super(String, (stage: string) => ({id: stage, text: stage} as Option));
   }
 }
 
 class DependencySuggestionProvider extends SuggestionProvider {
-  private cache: AutocompleteCache;
+  private cache: SuggestionCache;
 
-  constructor(cache: AutocompleteCache) {
+  constructor(cache: SuggestionCache) {
     super();
     this.cache = cache;
   }

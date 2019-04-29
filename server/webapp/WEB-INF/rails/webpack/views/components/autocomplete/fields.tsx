@@ -18,14 +18,12 @@ import * as Awesomplete from "awesomplete";
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as _ from "lodash";
 import * as m from "mithril";
-import * as defaultStyles from "./index.scss";
-
 import {BaseAttrs, TextField} from "views/components/forms/input_fields";
+import * as defaultStyles from "./index.scss";
 
 export type SuggestionWriter = (data: Awesomplete.Suggestion[]) => void;
 
 const AWESOMPLETE_KEYS = ["list", "minChars", "maxItems", "autoFirst", "data", "filter", "sort", "item", "replace"];
-// const AWESOMPLETE_EVTS = ["awesomplete-close", "awesomplete-open", "awesomplete-select", "awesomplete-selectcomplete", "awesomplete-highlight"];
 
 interface Attrs {
   css?: typeof defaultStyles;
@@ -96,11 +94,5 @@ export class AutocompleteField extends MithrilViewComponent<AutoCompAttrs> {
   view(vnode: m.Vnode<AutoCompAttrs, {}>): m.Children | void | null {
     const attrs = stripNativeAttrs(stripAwesompleteOpts(vnode.attrs)) as BaseAttrs<string>;
     return <TextField {...attrs} />;
-  }
-}
-
-export class SimpleAutocomplete extends MithrilViewComponent<Attrs> {
-  view(vnode: m.Vnode<Attrs>) {
-    return <input type="text"/>;
   }
 }

@@ -20,15 +20,22 @@ import * as m from "mithril";
 import {DependencyMaterialAttributes, GitMaterialAttributes, HgMaterialAttributes, Material, P4MaterialAttributes, SvnMaterialAttributes, TfsMaterialAttributes} from "models/materials/types";
 import {Form, FormBody} from "views/components/forms/form";
 import {Option, SelectField, SelectFieldOptions} from "views/components/forms/input_fields";
-import {AutocompleteCache, DependencyFields} from "./non_scm_material_fields";
+import {DefaultCache, DependencyFields, SuggestionCache} from "./non_scm_material_fields";
 import {GitFields, HgFields, P4Fields, SvnFields, TfsFields} from "./scm_material_fields";
 
 interface Attrs {
   material: Material;
+  cache?: SuggestionCache;
 }
 
 export class MaterialEditor extends MithrilViewComponent<Attrs> {
-  cache: AutocompleteCache = new AutocompleteCache();
+  cache: SuggestionCache = new DefaultCache();
+
+  oninit(vnode: m.Vnode<Attrs, {}>) {
+    if (vnode.attrs.cache) {
+      this.cache = vnode.attrs.cache;
+    }
+  }
 
   view(vnode: m.Vnode<Attrs>) {
     return <FormBody>
@@ -54,7 +61,7 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
     ];
   }
 
-  fieldsForType(material: Material, cacheable: AutocompleteCache): m.Children {
+  fieldsForType(material: Material, cacheable: SuggestionCache): m.Children {
     switch (material.type()) {
       case "git":
         if (!(material.attributes() instanceof GitMaterialAttributes)) {

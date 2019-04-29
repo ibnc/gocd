@@ -44,7 +44,7 @@ export class DependencyMaterialAutocomplete<P, S> implements PipelineNameCache<P
     this.toStage = toStage;
   }
 
-  prime(onComplete: () => void) {
+  prime(onComplete: () => void, onError?: () => void) {
     if (this.busy()) {
       return;
     }
@@ -52,13 +52,16 @@ export class DependencyMaterialAutocomplete<P, S> implements PipelineNameCache<P
     this.lock();
 
     ApiRequestBuilder.GET(SparkRoutes.internalDependencyMaterialSuggestionsPath(), ApiVersion.v1).then((res) => {
-      res.map((body) => {
+      res.do((s) => {
         delete this.error;
-        return this.data = JSON.parse(body) as PipelineSuggestion[];
+        this.data = JSON.parse(s.body) as PipelineSuggestion[];
+        onComplete();
+      }, (e) => {
+        this.error = e.message;
+        if (onError) {
+          onError();
+        }
       });
-      onComplete();
-    }).catch((reason) => {
-      this.error = reason;
     }).finally(() => {
       this.release();
     });
