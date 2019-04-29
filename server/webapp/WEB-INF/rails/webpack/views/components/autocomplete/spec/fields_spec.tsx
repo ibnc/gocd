@@ -38,6 +38,7 @@ describe("AutocompleteField", () => {
     expect(q(helper, "input[type='text']")).toBeTruthy();
     expect(q(helper, `.${css.awesomplete}`)).toBeTruthy();
     expect(q(helper, `[role="listbox"]`)).toBeTruthy();
+    expect(q(helper, `[role="listbox"]`).textContent).toBe("");
   });
 
   it("binds a model", () => {
@@ -57,6 +58,8 @@ describe("AutocompleteField", () => {
       return <AutocompleteField label="Business Speak" property={model} provider={new CrazyBusinessSpeakProvider()}/>;
     });
     const input = q(helper, "input") as HTMLInputElement;
+    expect(q(helper, `[role="listbox"]`).textContent).toBe("");
+
     input.value = "syn";
     events.simulate(input, "input");
     expect(q(helper, `[role="listbox"]`).textContent).toBe("Synergy");
