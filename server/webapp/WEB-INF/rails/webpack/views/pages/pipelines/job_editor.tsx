@@ -31,6 +31,5 @@ export class JobEditor extends MithrilViewComponent<Attrs> {
         <TextField label="Job Name" placeholder="e.g., run-unit-tests" required={true} property={vnode.attrs.job.name} errorText={vnode.attrs.job.errors().errorsForDisplay("name")}/>
       </Form>
     </FormBody>;
-
   }
 }

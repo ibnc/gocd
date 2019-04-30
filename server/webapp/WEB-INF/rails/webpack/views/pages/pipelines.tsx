@@ -19,6 +19,7 @@ import {GitMaterialAttributes, Material} from "models/materials/types";
 import {Job} from "models/pipeline_configs/job";
 import {PipelineConfig} from "models/pipeline_configs/pipeline_config";
 import {Stage} from "models/pipeline_configs/stage";
+import {ExecTask, Task} from "models/pipeline_configs/task";
 import * as s from "underscore.string";
 import {Page, PageState} from "views/pages/page";
 import {PipelineActions} from "views/pages/pipelines/actions";
@@ -39,7 +40,8 @@ const jobImg      = require("../../../app/assets/images/concept_diagrams/concept
 
 export class PipelineCreatePage extends Page {
   private material: Material = new Material("git", new GitMaterialAttributes());
-  private job: Job = new Job("", []);
+  private tasks: Task[] = [new ExecTask("", [])];
+  private job: Job = new Job("", this.tasks);
   private stage: Stage = new Stage("", [this.job]);
   private model: PipelineConfig = new PipelineConfig("", [this.material], [this.stage]);
 
@@ -90,7 +92,7 @@ export class PipelineCreatePage extends Page {
       <FillableSection sectionId="job">
         <UserInputPane heading="Part 4: Job and Tasks">
           <JobEditor job={this.job}/>
-          <TaskEditor />
+          <TaskEditor tasks={this.job.tasks}/>
           <AdvancedSettings>
             More to come...
           </AdvancedSettings>

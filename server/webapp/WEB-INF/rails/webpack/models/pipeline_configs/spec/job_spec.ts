@@ -19,7 +19,7 @@ import {ExecTask} from "models/pipeline_configs/task";
 
 describe("Job model", () => {
   function validJob() {
-    return new Job("name", [new ExecTask()]);
+    return new Job("name", [new ExecTask("ls", ["l"])]);
   }
 
   it("should include a name", () => {
@@ -27,7 +27,7 @@ describe("Job model", () => {
     expect(job.isValid()).toBe(true);
     expect(job.errors().count()).toBe(0);
 
-    job = new Job("", [new ExecTask()]);
+    job = new Job("", [new ExecTask("ls", [])]);
     expect(job.isValid()).toBe(false);
     expect(job.errors().count()).toBe(1);
   });

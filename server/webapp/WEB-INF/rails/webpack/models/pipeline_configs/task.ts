@@ -25,10 +25,14 @@ export interface Task extends ValidatableMixin {
 
 export class ExecTask extends ValidatableMixin implements Task {
   type: ValidTypes =  "exec";
+  command: string;
+  arguments: string[];
 
-  constructor() {
+  constructor(cmd: string, args: string[]) {
     super();
     ValidatableMixin.call(this);
+    this.command = cmd;
+    this.arguments = args;
   }
 
   toApiPayload() {
