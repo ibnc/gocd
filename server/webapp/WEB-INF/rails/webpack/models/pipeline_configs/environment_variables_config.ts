@@ -18,31 +18,32 @@ import JsonUtils from "helpers/json_utils";
 import {Stream} from "mithril/stream";
 import * as stream from "mithril/stream";
 import {ValidatableMixin} from "models/mixins/new_validatable_mixin";
-import {EnvironmentVariableConfig} from "models/pipeline_configs/environment_variable_config";
-import {Task} from "models/pipeline_configs/task";
+import {EncryptedValue} from "views/components/forms/encrypted_value";
 
-export class Job extends ValidatableMixin {
-  name: Stream<string>;
-  environmentVariables?: Stream<EnvironmentVariableConfig[]>;
-  tasks: Stream<Task[]>;
+export class EnvironmentVariableConfig extends ValidatableMixin {
+  key: Stream<string>;
+  value?: Stream<EncryptedValue>;
+  secure: Stream<boolean> = stream(false);
 
-  constructor(name: string, tasks: Task[]) {
+  constructor(key?: string, value?: EncryptedValue, secure?: boolean) {
     super();
-
+    this.key = stream(key);
+    this.secure = stream(secure);
+    this.secure = stream(secure);
+    this.value = stream(value);
     ValidatableMixin.call(this);
-    this.name = stream(name);
-    this.tasks = stream(tasks);
-    this.validatePresenceOf("name");
-    this.validatePresenceOf("tasks");
-    this.validateEach("tasks");
-    this.validateEach("environmentVariables");
+    this.validatePresenceOf("key");
+    this.validatePresenceOf("secure");
+    this.validatePresenceOf("value");
   }
+
+  validate(
 
   toApiPayload() {
     return JsonUtils.toSnakeCasedObject(this);
   }
 
-  modelType() {
-    return "Job";
+  modelType(): string {
+    return "EnvironmentVariableConfig";
   }
 }
