@@ -36,13 +36,13 @@ export class StageEditor extends MithrilViewComponent<Attrs> {
         <TextField label="Stage Name" placeholder="e.g., Test-and-Report" required={true} property={stage.name} errorText={stage.errors().errorsForDisplay("name")}/>
         <AdvancedSettings>
           <div class={css.approvalTypeSelectors}>
-            <label className="inline">This stage runs:</label>
-            <input type="radio" class={css.approvalTypeSelector} checked={stage.approval().isSuccessType()} value="success" onclick={this.changeApprovalType.bind(this, ApprovalType.success, stage.approval())} />
-            <label className="inline">Automatically</label>
-            <input type="radio" class={css.approvalTypeSelector} checked={!stage.approval().isSuccessType()} value="manual" onclick={this.changeApprovalType.bind(this, ApprovalType.manual, stage.approval())} />
-            <label className="inline">Manually</label>
+            <label>This stage runs:</label>
+            <input class={css.approvalTypeSelector} type="radio" checked={stage.approval().isSuccessType()} value="success" onclick={this.changeApprovalType.bind(this, ApprovalType.success, stage.approval())} />
+            <label>Automatically</label>
+            <input class={css.approvalTypeSelector} type="radio" checked={!stage.approval().isSuccessType()} value="manual" onclick={this.changeApprovalType.bind(this, ApprovalType.manual, stage.approval())} />
+            <label>Manually</label>
             <Tooltip.Help size={TooltipSize.medium}
-                          content={"Automatically or Manually trigger your stage to run after preceding stage completes"} />
+                          content="Automatically or Manually trigger your stage to run after preceding stage completes" />
           </div>
         </AdvancedSettings>
       </Form>

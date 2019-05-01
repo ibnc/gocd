@@ -27,20 +27,23 @@ export enum ApprovalType {
 }
 
 export class Approval extends ValidatableMixin {
-  type: Stream<ApprovalType> = stream(ApprovalType.success);
+  type: Stream<ApprovalType> = stream();
+
   //authorization must be present for server side validations
   //even though it's not editable from the create pipeline page
-  authorization: Stream<object> = stream({});
+  authorization: Stream<any> = stream({});
 
   constructor() {
     super();
     ValidatableMixin.call(this);
+
+    this.type(ApprovalType.success);
     this.validatePresenceOf("type");
     this.validatePresenceOf("authorization");
   }
 
   isSuccessType() {
-    return this.type() === ApprovalType.success;
+    return ApprovalType.success === this.type();
   }
 }
 
@@ -51,9 +54,11 @@ export class Stage extends ValidatableMixin {
 
   constructor(name: string, jobs: Job[]) {
     super();
-    this.name = stream(name);
     ValidatableMixin.call(this);
+
+    this.name = stream(name);
     this.validatePresenceOf("name");
+
     this.jobs = stream(new NameableSet(jobs));
     this.validateWith(new NonEmptyCollectionValidator({message: `A stage must have at least one job.`}), "jobs");
     this.validateAssociated("jobs");
