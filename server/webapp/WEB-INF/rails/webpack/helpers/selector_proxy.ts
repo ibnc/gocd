@@ -14,6 +14,21 @@
  * limitations under the License.
  */
 
+/**
+ * Takes a `styles` object and returns a proxy to prefix all
+ * classnames with a `.` so it can be used directly in Element.querySelector().
+ * Perfect for the lazy. Like me.
+ *
+ * Example:
+ *
+ * import * as styles from "./index.scss";
+ * import asSelector from "helpers/selector_proxy";
+ *
+ * const sel = asSelector<typeof styles>(styles);
+ *
+ * console.log(styles.myClass); // "my-class"
+ * console.log(sel.myClass);    // ".my-class"
+ */
 export default function asSelectorProxy<T>(obj: T): T {
   return new Proxy(obj, {
     get: (target: any, key: string) => {

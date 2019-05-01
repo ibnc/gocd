@@ -19,7 +19,7 @@ import {ExecTask} from "models/pipeline_configs/task";
 
 describe("Job model", () => {
   function validJob() {
-    return new Job("name", [new ExecTask("ls", ["l"])]);
+    return new Job("name", [new ExecTask("ls", ["-lA"])]);
   }
 
   it("should include a name", () => {
@@ -34,6 +34,17 @@ describe("Job model", () => {
 
   it("should serialize correctly", () => {
     const job = validJob();
-    expect(job.toApiPayload()).toEqual({ name: 'name', tasks: [{ type: "exec"}]});
+    expect(job.toApiPayload()).toEqual({
+      name: "name",
+      tasks: [{
+        type: "exec",
+        attributes: {
+          command: "ls",
+          arguments: ["-lA"],
+          run_if: []
+        }
+      }]
+    });
   });
+
 });

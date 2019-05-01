@@ -67,8 +67,6 @@ export class ExecTask extends AbstractTask {
 
   constructor(cmd: string, args: string[]) {
     super();
-    ValidatableMixin.call(this);
-
     this.attributes(new ExecTaskAttributes(cmd, args));
   }
 }
