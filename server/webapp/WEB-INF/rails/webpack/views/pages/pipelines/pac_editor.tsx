@@ -33,13 +33,16 @@ export class PACEditor extends MithrilViewComponent<Attrs> {
   view(vnode: m.Vnode<Attrs>) {
     return (
       <div class={css.pacEditorDryRunWrapper}>
-        <Buttons.Secondary onclick={this.check.bind(this, vnode.attrs.material)} small={false}>PACable?</Buttons.Secondary>
+        <div><Buttons.Secondary onclick={this.check.bind(this, vnode.attrs.material)} small={false}>PACable?</Buttons.Secondary></div>
         <div class={css.pacEditorDryRunResult}>{this.pacMessage}</div>
       </div>
     );
   }
 
-  check(material: Material, event: Event) {
+  check(material: Material, event: MouseEvent) {
+    const btn = event.target as Element;
+    const btnWrapper = btn.parentNode as Element;
+    btnWrapper.classList.add(css.pacEditorDryRunInProgress);
     ConfigReposCRUD.dryRun(material).then((result: ApiResult<string>) => {
       result.do((resp: SuccessResponse<string>) => {
         const body = JSON.parse(resp.body);
@@ -47,6 +50,8 @@ export class PACEditor extends MithrilViewComponent<Attrs> {
       }, (err: ErrorResponse) => {
         this.pacMessage = <FlashMessage type={MessageType.alert} message={<pre>{err.message}</pre>}/>;
       });
+    }).finally(() => {
+      btnWrapper.classList.remove(css.pacEditorDryRunInProgress);
     });
   }
 }

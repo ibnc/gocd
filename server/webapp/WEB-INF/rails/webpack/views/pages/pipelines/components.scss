@@ -23,17 +23,42 @@ $diagram-width: 485px;
 $diagram-caption-width: 300px;
 $error-container-width: 450px;
 
+@mixin fa-icon($type, $colors: $icon-light-color, $size: 5px) {
+  @include icon-after($type: $type, $color: $colors, $size: 15px, $margin: 0) {
+    display:      inline-block;
+    margin-left: $size;
+    @content
+  }
+  font-size: 14px;
+}
+
 .pac-editor-dry-run-wrapper {
   margin-left: 15px;
   width:       100%;
-}
 
-.pac-editor-dry-run-result {
-  margin: 10px 0;
-  min-height:  10px;
+  .pac-editor-dry-run-in-progress {
+    @include fa-icon($type: $fa-var-spinner, $colors: $icon-color, $size: 15px) {
+      animation: rotate 0.8s linear infinite;
+    }
 
-  &:empty {
-    margin-top: 0;
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(359deg);
+      }
+    }
+  }
+
+  .pac-editor-dry-run-result {
+    margin: 10px 0;
+    min-height:  10px;
+
+    &:empty {
+      margin-top: 0;
+    }
   }
 }
 

@@ -30,6 +30,8 @@ export const button: string;
 export const buttonGroup: string;
 export const btnDropdownContainer: string;
 export const pacEditorDryRunWrapper: string;
+export const pacEditorDryRunInProgress: string;
+export const rotate: string;
 export const pacEditorDryRunResult: string;
 export const fillable: string;
 export const actions: string;

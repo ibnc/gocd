@@ -143,17 +143,17 @@ public class ConfigReposInternalControllerV2 extends ApiController implements Sp
             JsonReader jsonReader = GsonTransformer.getInstance().jsonReaderFrom(req.body());
             ConfigRepoConfig repoConfig = ConfigRepoConfigRepresenterV2.fromJSON(jsonReader);
             repoConfig.setPluginId("yaml.config.plugin");
-            if (service.hasConfigRepo(repoConfig)) {
-                responseText = new ConfigRepoDryRunResult("UnPACable :( - The provided Material is already being used to create Pipelines with code", false).toJSON();
-            } else {
-                Material material = converter.toMaterial(repoConfig.getMaterialConfig());
-                List<Modification> modifications = materialService.latestModification(material, folder, subprocessExecutionContext);
-                materialService.checkout(material, folder, Modification.latestRevision(modifications), subprocessExecutionContext);
-                if (dataSource.dryRun(repoConfig, folder)) {
-                    responseText = new ConfigRepoDryRunResult("PACable! - Config file(s) present", true).toJSON();
+            Material material = converter.toMaterial(repoConfig.getMaterialConfig());
+            List<Modification> modifications = materialService.latestModification(material, folder, subprocessExecutionContext);
+            materialService.checkout(material, folder, Modification.latestRevision(modifications), subprocessExecutionContext);
+            if (dataSource.dryRun(repoConfig, folder)) {
+                if (service.hasConfigRepo(repoConfig)) {
+                    responseText = new ConfigRepoDryRunResult("UnPACable :( - The provided material is already being used to create pipelines with code", false).toJSON();
                 } else {
-                    responseText = new ConfigRepoDryRunResult("UnPACable :( - There are no config files present or they are not parsable", false).toJSON();
+                    responseText = new ConfigRepoDryRunResult("PACable! - Config file(s) present", true).toJSON();
                 }
+            } else {
+                responseText = new ConfigRepoDryRunResult("UnPACable :( - There are no config files present or they are not parsable", false).toJSON();
             }
         } catch (Exception ex) {
             res.status(500);
