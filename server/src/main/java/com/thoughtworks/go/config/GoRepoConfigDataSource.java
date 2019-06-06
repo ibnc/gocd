@@ -184,7 +184,7 @@ public class GoRepoConfigDataSource implements ChangedRepoConfigWatchListListene
             PartialConfigProvider plugin = this.configPluginService.partialConfigProviderFor(repoConfig);
             PartialConfigLoadContext context = new LoadContext(repoConfig);
             PartialConfig newPart = plugin.load(folder, context);
-            if (newPart == null) {
+            if (newPart == null || newPart.equals(new PartialConfig())) {
                 return false;
             }
 

@@ -34,8 +34,7 @@ import com.thoughtworks.go.config.materials.SubprocessExecutionContext;
 import com.thoughtworks.go.config.remote.ConfigRepoConfig;
 import com.thoughtworks.go.domain.materials.Material;
 import com.thoughtworks.go.domain.materials.MaterialConfig;
-import com.thoughtworks.go.domain.materials.NullRevision;
-import com.thoughtworks.go.domain.materials.mercurial.StringRevision;
+import com.thoughtworks.go.domain.materials.Modification;
 import com.thoughtworks.go.server.materials.MaterialUpdateService;
 import com.thoughtworks.go.server.persistence.MaterialRepository;
 import com.thoughtworks.go.server.service.ConfigRepoService;
@@ -139,23 +138,22 @@ public class ConfigReposInternalControllerV2 extends ApiController implements Sp
 
     String dryRun(Request req, Response res) {
         File folder = FileUtil.createTempFolder();
-        String responseText = "";
+        String responseText;
         try {
-            boolean result = false;
             JsonReader jsonReader = GsonTransformer.getInstance().jsonReaderFrom(req.body());
             ConfigRepoConfig repoConfig = ConfigRepoConfigRepresenterV2.fromJSON(jsonReader);
             repoConfig.setPluginId("yaml.config.plugin");
             Material material = converter.toMaterial(repoConfig.getMaterialConfig());
-            materialService.checkout(material, folder, new StringRevision("origin/master"), subprocessExecutionContext);
-            result = dataSource.dryRun(repoConfig, folder);
-            if (result) {
-                responseText = MessageJson.create("OK");
+            List<Modification> modifications = materialService.latestModification(material, folder, subprocessExecutionContext);
+            materialService.checkout(material, folder, Modification.latestRevision(modifications), subprocessExecutionContext);
+            if(dataSource.dryRun(repoConfig, folder)) {
+                responseText = MessageJson.create("Config file(s) present");
             } else {
-                responseText = MessageJson.create("NOPE");
+                responseText = MessageJson.create("There are no config files present or they are not parsable");
             }
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
             res.status(500);
-            responseText = MessageJson.create(ignored.getMessage());
+            responseText = MessageJson.create(ex.getMessage());
         } finally {
             FileUtils.deleteQuietly(folder);
         }
