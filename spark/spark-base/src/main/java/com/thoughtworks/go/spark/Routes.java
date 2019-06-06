@@ -72,6 +72,7 @@ public class Routes {
 
         public static final String STATUS_PATH = "/:id/status";
         public static final String TRIGGER_UPDATE_PATH = "/:id/trigger_update";
+        public static final String DRY_RUN = "/dry_run";
 
         public static final String BASE = "/api/admin/config_repos";
         public static final String DOC = apiDocsUrl("#config-repos");

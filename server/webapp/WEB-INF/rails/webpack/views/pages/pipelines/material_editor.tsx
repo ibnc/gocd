@@ -17,7 +17,9 @@
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as _ from "lodash";
 import * as m from "mithril";
+import {ConfigReposCRUD} from "models/config_repos/config_repos_crud";
 import {DependencyMaterialAttributes, GitMaterialAttributes, HgMaterialAttributes, Material, P4MaterialAttributes, SvnMaterialAttributes, TfsMaterialAttributes} from "models/materials/types";
+import * as Buttons from "views/components/buttons";
 import {Form, FormBody} from "views/components/forms/form";
 import {Option, SelectField, SelectFieldOptions} from "views/components/forms/input_fields";
 import {DefaultCache, DependencyFields, SuggestionCache} from "./non_scm_material_fields";
@@ -37,11 +39,21 @@ export class MaterialEditor extends MithrilViewComponent<Attrs> {
     }
   }
 
+  check(material: Material, event: Event) {
+    const result = ConfigReposCRUD.dryRun(material);
+    result.then((response) => {
+      //tslint-ignroe-line no-console
+      console.log(response);
+    });
+  }
+
   view(vnode: m.Vnode<Attrs>) {
     return <FormBody>
       <SelectField label="Material Type" property={vnode.attrs.material.type} required={true}>
         <SelectFieldOptions selected={vnode.attrs.material.type()} items={this.supportedMaterials()}/>
       </SelectField>
+
+      <Buttons.Primary onclick={this.check.bind(this, vnode.attrs.material)} small={false}>Wubba lubba dub dub!!!!</Buttons.Primary>
 
       <Form last={true} compactForm={true}>
         {this.fieldsForType(vnode.attrs.material, this.cache)}

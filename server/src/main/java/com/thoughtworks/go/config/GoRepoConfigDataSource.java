@@ -179,6 +179,21 @@ public class GoRepoConfigDataSource implements ChangedRepoConfigWatchListListene
         }
     }
 
+    public boolean dryRun(ConfigRepoConfig repoConfig, File folder) {
+        try {
+            PartialConfigProvider plugin = this.configPluginService.partialConfigProviderFor(repoConfig);
+            PartialConfigLoadContext context = new LoadContext(repoConfig);
+            PartialConfig newPart = plugin.load(folder, context);
+            if (newPart == null) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     protected void onConfigRepoConfigChange(ConfigRepoConfig configRepoConfig) {
         modifiedConfigRepoConfigsAwaitingParse.add(configRepoConfig);
     }

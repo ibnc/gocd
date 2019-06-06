@@ -18,6 +18,7 @@ import JsonUtils from "helpers/json_utils";
 import SparkRoutes from "helpers/spark_routes";
 import {ConfigRepoJSON, ConfigReposJSON} from "models/config_repos/serialization";
 import {ConfigRepo, ConfigRepos} from "models/config_repos/types";
+import {Material} from "models/materials/types";
 
 export function configRepoToSnakeCaseJSON(o: ConfigRepo) {
   const configurations = o.createConfigurationsFromText();
@@ -64,6 +65,17 @@ export class ConfigReposCRUD {
 
   static triggerUpdate(id: string) {
     return ApiRequestBuilder.POST(SparkRoutes.configRepoTriggerUpdatePath(id), this.API_VERSION_HEADER);
+  }
+
+  static dryRun(mat: Material) {
+    return ApiRequestBuilder.POST(SparkRoutes.configRepoDryRunPath(),
+      this.API_VERSION_HEADER,
+      {
+        payload: {
+          material: JsonUtils.toSnakeCasedObject(mat)
+        }
+      }
+    );
   }
 
   private static extractObjectWithEtag() {

@@ -150,6 +150,10 @@ export default class {
     return `/go/api/internal/config_repos/${id}/trigger_update`;
   }
 
+  static configRepoDryRunPath(): string {
+    return `/go/api/internal/config_repos/dry_run`;
+  }
+
   static materialConnectionCheck(): string {
     return `/go/api/admin/internal/material_test`;
   }
