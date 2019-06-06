@@ -23,6 +23,20 @@ $diagram-width: 485px;
 $diagram-caption-width: 300px;
 $error-container-width: 450px;
 
+.pac-editor-dry-run-wrapper {
+  margin-left: 15px;
+  width:       100%;
+}
+
+.pac-editor-dry-run-result {
+  margin: 10px 0;
+  min-height:  10px;
+
+  &:empty {
+    margin-top: 0;
+  }
+}
+
 .fillable, .actions {
   background-color: $white;
   max-width: 1200px;

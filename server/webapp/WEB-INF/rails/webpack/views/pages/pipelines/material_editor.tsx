@@ -17,10 +17,7 @@
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as _ from "lodash";
 import * as m from "mithril";
-import {ConfigReposCRUD} from "models/config_repos/config_repos_crud";
 import {DependencyMaterialAttributes, GitMaterialAttributes, HgMaterialAttributes, Material, P4MaterialAttributes, SvnMaterialAttributes, TfsMaterialAttributes} from "models/materials/types";
-import * as Buttons from "views/components/buttons";
-import {FlashMessage, MessageType} from "views/components/flash_message";
 import {Form, FormBody} from "views/components/forms/form";
 import {Option, SelectField, SelectFieldOptions} from "views/components/forms/input_fields";
 import {DefaultCache, DependencyFields, SuggestionCache} from "./non_scm_material_fields";
@@ -33,35 +30,17 @@ interface Attrs {
 
 export class MaterialEditor extends MithrilViewComponent<Attrs> {
   cache: SuggestionCache = new DefaultCache();
-  private pacMessage: m.Child | undefined;
 
   oninit(vnode: m.Vnode<Attrs, {}>) {
     if (vnode.attrs.cache) {
       this.cache = vnode.attrs.cache;
     }
   }
-
-  check(material: Material, event: Event) {
-    const result = ConfigReposCRUD.dryRun(material);
-    result.then((response) => {
-
-      const x = response.unwrap();
-      if (x && x.body) {
-        const body = JSON.parse(x.body);
-
-        this.pacMessage = <FlashMessage type={MessageType.info} message={<pre>{body.message}</pre>}/>;
-      }
-    });
-  }
-
   view(vnode: m.Vnode<Attrs>) {
     return <FormBody>
       <SelectField label="Material Type" property={vnode.attrs.material.type} required={true}>
         <SelectFieldOptions selected={vnode.attrs.material.type()} items={this.supportedMaterials()}/>
       </SelectField>
-
-      <Buttons.Primary onclick={this.check.bind(this, vnode.attrs.material)} small={false}>Wubba lubba dub dub!!!!</Buttons.Primary>
-      {this.pacMessage}
 
       <Form last={true} compactForm={true}>
         {this.fieldsForType(vnode.attrs.material, this.cache)}

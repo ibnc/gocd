@@ -29,6 +29,8 @@ export const iconRemove: string;
 export const button: string;
 export const buttonGroup: string;
 export const btnDropdownContainer: string;
+export const pacEditorDryRunWrapper: string;
+export const pacEditorDryRunResult: string;
 export const fillable: string;
 export const actions: string;
 export const saveBtns: string;

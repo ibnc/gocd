@@ -31,6 +31,7 @@ import {TestConnection} from "views/components/materials/test_connection";
 import {TooltipSize} from "views/components/tooltip";
 import * as Tooltip from "views/components/tooltip";
 import {AdvancedSettings} from "views/pages/pipelines/advanced_settings";
+import {PACEditor} from "views/pages/pipelines/pac_editor";
 import {DESTINATION_DIR_HELP_MESSAGE, IDENTIFIER_FORMAT_HELP_MESSAGE} from "./messages";
 
 interface Attrs {
@@ -47,6 +48,7 @@ abstract class ScmFields extends MithrilViewComponent<Attrs> {
     return [
       this.requiredFields(mattrs),
       <TestConnection material={vnode.attrs.material}/>,
+      <PACEditor material={vnode.attrs.material}/>,
       <AdvancedSettings forceOpen={mattrs.errors().hasErrors("name") || mattrs.errors().hasErrors("destination")}>
         {this.extraFields(mattrs)}
         <TextField label={[

@@ -107,6 +107,10 @@ public class ConfigRepoService {
 
     }
 
+    public boolean hasConfigRepo(ConfigRepoConfig configRepo) {
+       return findByFingerprint(configRepo.getMaterialConfig().getFingerprint()) != null;
+    }
+
     public void updateConfigRepo(String repoIdToUpdate, ConfigRepoConfig newConfigRepo, String md5OfExistingConfigRepo,
                                  Username username, HttpLocalizedOperationResult result) {
         UpdateConfigRepoCommand command = new UpdateConfigRepoCommand(securityService, entityHashingService, repoIdToUpdate,
