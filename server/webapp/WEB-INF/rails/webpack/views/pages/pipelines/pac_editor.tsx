@@ -17,6 +17,7 @@
 import {ApiResult, ErrorResponse, SuccessResponse} from "helpers/api_request_builder";
 import {MithrilViewComponent} from "jsx/mithril-component";
 import * as m from "mithril";
+import * as _ from "lodash";
 import {ConfigReposCRUD} from "models/config_repos/config_repos_crud";
 import {Material} from "models/materials/types";
 import * as Buttons from "views/components/buttons";
@@ -46,12 +47,21 @@ export class PACEditor extends MithrilViewComponent<Attrs> {
     ConfigReposCRUD.dryRun(material).then((result: ApiResult<string>) => {
       result.do((resp: SuccessResponse<string>) => {
         const body = JSON.parse(resp.body);
-        this.pacMessage = <FlashMessage type={body.valid ? MessageType.info : MessageType.warning} message={<pre>{body.message}</pre>}/>;
+        const pluginsText = _.map(body.plugins, (p) => {
+          return (`\t- ${p}\n`);
+        }).join("");
+        const flashText = (<pre>{`${body.message}\n\nThe following plugins are useable:\n${pluginsText}`}</pre>);
+        this.pacMessage = (
+          <FlashMessage
+            type={body.valid ? MessageType.info : MessageType.warning}
+            message={flashText}
+          />
+        );
       }, (err: ErrorResponse) => {
         this.pacMessage = <FlashMessage type={MessageType.alert} message={<pre>{err.message}</pre>}/>;
+        });
+      }).finally(() => {
+        btnWrapper.classList.remove(css.pacEditorDryRunInProgress);
       });
-    }).finally(() => {
-      btnWrapper.classList.remove(css.pacEditorDryRunInProgress);
-    });
+    }
   }
-}

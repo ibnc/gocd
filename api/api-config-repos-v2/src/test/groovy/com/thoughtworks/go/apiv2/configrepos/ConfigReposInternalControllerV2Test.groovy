@@ -69,7 +69,7 @@ class ConfigReposInternalControllerV2Test implements SecurityServiceTrait, Contr
 
   @Override
   ConfigReposInternalControllerV2 createControllerInstance() {
-    new ConfigReposInternalControllerV2(new ApiAuthenticationHelper(securityService, goConfigService), service, dataSource, materialUpdateService, converter, materialRepository, materialService, subprocessExecutionContext)
+    new ConfigReposInternalControllerV2(new ApiAuthenticationHelper(securityService, goConfigService), service, dataSource, materialUpdateService, converter, materialService, subprocessExecutionContext, defaultPluginInfoFinder)
   }
 
   @Nested

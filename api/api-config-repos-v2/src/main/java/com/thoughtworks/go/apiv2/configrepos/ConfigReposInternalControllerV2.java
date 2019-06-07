@@ -36,10 +36,10 @@ import com.thoughtworks.go.domain.materials.Material;
 import com.thoughtworks.go.domain.materials.MaterialConfig;
 import com.thoughtworks.go.domain.materials.Modification;
 import com.thoughtworks.go.server.materials.MaterialUpdateService;
-import com.thoughtworks.go.server.persistence.MaterialRepository;
 import com.thoughtworks.go.server.service.ConfigRepoService;
 import com.thoughtworks.go.server.service.MaterialConfigConverter;
 import com.thoughtworks.go.server.service.MaterialService;
+import com.thoughtworks.go.server.service.plugins.builder.DefaultPluginInfoFinder;
 import com.thoughtworks.go.spark.Routes.ConfigRepos;
 import com.thoughtworks.go.spark.spring.SparkSpringController;
 import com.thoughtworks.go.util.FileUtil;
@@ -52,9 +52,12 @@ import spark.Response;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.thoughtworks.go.plugin.domain.common.PluginConstants.CONFIG_REPO_EXTENSION;
 import static com.thoughtworks.go.util.CachedDigestUtils.sha256Hex;
 import static spark.Spark.*;
 
@@ -66,21 +69,21 @@ public class ConfigReposInternalControllerV2 extends ApiController implements Sp
     private final ApiAuthenticationHelper authHelper;
     private final MaterialUpdateService mus;
     private final MaterialConfigConverter converter;
-    private final MaterialRepository materialRepository;
     private final MaterialService materialService;
     private final SubprocessExecutionContext subprocessExecutionContext;
+    private final DefaultPluginInfoFinder defaultPluginInfoFinder;
 
     @Autowired
-    public ConfigReposInternalControllerV2(ApiAuthenticationHelper authHelper, ConfigRepoService service, GoRepoConfigDataSource dataSource, MaterialUpdateService mus, MaterialConfigConverter converter, MaterialRepository materialRepository, MaterialService materialService, SubprocessExecutionContext subprocessExecutionContext) {
+    public ConfigReposInternalControllerV2(ApiAuthenticationHelper authHelper, ConfigRepoService service, GoRepoConfigDataSource dataSource, MaterialUpdateService mus, MaterialConfigConverter converter, MaterialService materialService, SubprocessExecutionContext subprocessExecutionContext, DefaultPluginInfoFinder defaultPluginInfoFinder) {
         super(ApiVersion.v2);
         this.service = service;
         this.dataSource = dataSource;
         this.authHelper = authHelper;
         this.mus = mus;
         this.converter = converter;
-        this.materialRepository = materialRepository;
         this.materialService = materialService;
         this.subprocessExecutionContext = subprocessExecutionContext;
+        this.defaultPluginInfoFinder = defaultPluginInfoFinder;
     }
 
     @Override
@@ -142,18 +145,24 @@ public class ConfigReposInternalControllerV2 extends ApiController implements Sp
         try {
             JsonReader jsonReader = GsonTransformer.getInstance().jsonReaderFrom(req.body());
             ConfigRepoConfig repoConfig = ConfigRepoConfigRepresenterV2.fromJSON(jsonReader);
-            repoConfig.setPluginId("yaml.config.plugin");
+            Map<String, String> pacPlugins = defaultPluginInfoFinder.pluginDisplayNameToPluginId(CONFIG_REPO_EXTENSION);
             Material material = converter.toMaterial(repoConfig.getMaterialConfig());
             List<Modification> modifications = materialService.latestModification(material, folder, subprocessExecutionContext);
             materialService.checkout(material, folder, Modification.latestRevision(modifications), subprocessExecutionContext);
-            if (dataSource.dryRun(repoConfig, folder)) {
-                if (service.hasConfigRepo(repoConfig)) {
-                    responseText = new ConfigRepoDryRunResult("UnPACable :( - The provided material is already being used to create pipelines with code", false).toJSON();
-                } else {
-                    responseText = new ConfigRepoDryRunResult("PACable! - Config file(s) present", true).toJSON();
+
+            List<String> pacAblePlugins = new ArrayList<>();
+            for(Map.Entry<String, String> plugin: pacPlugins.entrySet()) {
+                repoConfig.setPluginId(plugin.getValue());
+                if(dataSource.dryRun(repoConfig, folder)) {
+                    pacAblePlugins.add(plugin.getKey());
                 }
+            }
+            if (service.hasConfigRepo(repoConfig)) {
+                responseText = ConfigRepoDryRunResult.failure("The provided material is already being used to create pipelines with code").toJSON();
+            } else if (pacAblePlugins.isEmpty()) {
+                responseText = ConfigRepoDryRunResult.failure("There are no config files present or there was a parsing error").toJSON();
             } else {
-                responseText = new ConfigRepoDryRunResult("UnPACable :( - There are no config files present or they are not parsable", false).toJSON();
+                responseText = ConfigRepoDryRunResult.success("Config file(s) found", pacAblePlugins).toJSON();
             }
         } catch (Exception ex) {
             res.status(500);

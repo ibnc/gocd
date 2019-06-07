@@ -16,13 +16,33 @@
 
 package com.thoughtworks.go.apiv2.configrepos;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ConfigRepoDryRunResult {
     private String message;
     private Boolean valid;
+    private List<String> pacAblePlugins;
 
-    public ConfigRepoDryRunResult(String message, Boolean valid) {
+    public ConfigRepoDryRunResult(String message, Boolean valid, List<String> pacAblePlugins) {
        this.message = message;
        this.valid = valid;
+        this.pacAblePlugins = pacAblePlugins;
+    }
+
+    public static ConfigRepoDryRunResult success(String message, List<String> pacAblePlugins) {
+       return new ConfigRepoDryRunResult(message, true, pacAblePlugins);
+    }
+
+    public static ConfigRepoDryRunResult failure(String message) {
+        return new ConfigRepoDryRunResult(message, false, Collections.emptyList());
+    }
+
+    public String toJSON() {
+        String plugins = getPacAblePlugins().stream().map(p -> String.format("\"%s\"", p)).collect(Collectors.joining(", "));
+
+        return String.format("{\"message\": \"%s\", \"plugins\": [%s], \"valid\": %b}", getMessage(), plugins, getValid());
     }
 
     public String getMessage() {
@@ -33,7 +53,7 @@ public class ConfigRepoDryRunResult {
         return valid;
     }
 
-    public String toJSON() {
-        return String.format("{\"message\": \"%s\", \"valid\": %b}", getMessage(), getValid());
+    public List<String> getPacAblePlugins() {
+        return pacAblePlugins;
     }
 }
